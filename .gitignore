@@ -19,6 +19,7 @@
 
 # production
 /build
+atlas-credentials.env
 
 # misc
 .DS_Store
