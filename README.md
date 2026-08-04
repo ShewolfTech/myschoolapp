@@ -5,12 +5,6 @@ schools across every region and district of Uganda — fees, contacts, and
 details in one place — so they're not limited to only the schools they
 already know about.
 
-Built for [Freddieh Kirabo] by ShewolfTech.
-
-**Status:** In active development. This README is updated as each step of the
-build lands — see [Progress / Roadmap](#progress--roadmap) below for what's
-done and what's next.
-
 ---
 
 ## Tech stack
