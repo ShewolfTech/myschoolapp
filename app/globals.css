@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+:root {
+  --paper: #e9e1cb;
+  --paper-dark: #ddd2b3;
+  --ink: #2a2723;
+  --ink-soft: #55504a;
+  --chalkboard: #1f4a3d;
+  --chalkboard-dark: #163a30;
+  --margin-red: #a63a2e;
+  --ruled-blue: #3c5872;
+  --stamp-gold: #c89b3c;
+  --paper-white: #f6f2e6;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-paper-dark: var(--paper-dark);
+  --color-paper-white: var(--paper-white);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-chalkboard: var(--chalkboard);
+  --color-chalkboard-dark: var(--chalkboard-dark);
+  --color-margin-red: var(--margin-red);
+  --color-ruled-blue: var(--ruled-blue);
+  --color-stamp-gold: var(--stamp-gold);
+  --font-display: var(--font-zilla-slab);
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  /* System font stack for body text: no extra font request, which matters
+     on the mobile data budgets most parents using this app will have. */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.font-ledger {
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+
+.ruled-row {
+  border-bottom: 1px solid var(--ink-soft);
+  border-bottom-style: dashed;
+}
+
+.stamp {
+  transform: rotate(-6deg);
+  font-family: var(--font-display);
+}
+
