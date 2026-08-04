@@ -73,7 +73,7 @@ export default function SignupPage() {
                 : "bg-transparent text-ink-soft border-ink-soft/40"
             }`}
           >
-            I represent a school
+            I&apos;m a school rep
           </button>
         </div>
 
