@@ -1,4 +1,4 @@
-# School Directory Uganda
+# My School App Uganda
 
 A full-stack PWA that lets parents search and compare government and private
 schools across every region and district of Uganda — fees, contacts, and

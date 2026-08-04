@@ -11,7 +11,7 @@ const zillaSlab = Zilla_Slab({
 });
 
 export const metadata: Metadata = {
-  title: "School Directory Uganda | Find schools in every region",
+  title: "My School App Uganda | Find schools in every region",
   description:
     "Search and compare government and private schools across all regions and districts of Uganda — see fees, contacts, and details in one place.",
   manifest: "/manifest.json",

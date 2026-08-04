@@ -9,7 +9,7 @@ export async function SiteHeader() {
     <header className="bg-chalkboard text-paper-white">
       <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
         <Link href="/" className="font-display text-xl font-semibold">
-          School Directory Uganda
+          My School App Uganda
         </Link>
         <nav className="flex items-center gap-6 text-sm font-ledger">
           <Link href="/schools" className="hover:text-stamp-gold transition-colors">
