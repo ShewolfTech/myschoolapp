@@ -15,6 +15,11 @@ export async function SiteHeader() {
           <Link href="/schools" className="hover:text-stamp-gold transition-colors">
             Find a school
           </Link>
+          {session?.user?.role === "parent" && (
+            <Link href="/favorites" className="hover:text-stamp-gold transition-colors">
+              Saved schools
+            </Link>
+          )}
           {session?.user?.role === "school_rep" && (
             <Link href="/register-school" className="hover:text-stamp-gold transition-colors">
               My school

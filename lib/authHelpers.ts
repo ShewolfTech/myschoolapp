@@ -19,3 +19,16 @@ export async function requireRole(allowedRoles: UserRole[]) {
 
   return session;
 }
+
+/**
+ * Use in server components that just need any signed-in user, regardless of role.
+ */
+export async function requireAuth() {
+  const session = await auth();
+
+  if (!session?.user) {
+    redirect("/login");
+  }
+
+  return session;
+}

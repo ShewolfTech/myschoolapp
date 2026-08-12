@@ -2,6 +2,9 @@ import { notFound } from "next/navigation";
 import { connectDB } from "@/lib/db";
 import { School, IFeeItem } from "@/models/School";
 import "@/models/District";
+import { auth } from "@/lib/auth";
+import { User } from "@/models/User";
+import { FavoriteButton } from "./FavoriteButton";
 
 async function getSchool(slug: string) {
   await connectDB();
@@ -41,6 +44,16 @@ export default async function SchoolDetailPage({
     notFound();
   }
 
+  const session = await auth();
+  let isFavorited = false;
+  if (session?.user) {
+    const user = await User.findById(session.user.id).select("favorites").lean();
+    isFavorited =
+      user?.favorites?.some(
+        (favId: { toString(): string }) => favId.toString() === school._id.toString()
+      ) ?? false;
+  }
+
   const districtName = (school.district as unknown as { name: string })?.name ?? "";
   const feeGroups = groupFeesByTerm(school.feeStructure);
 
@@ -54,10 +67,16 @@ export default async function SchoolDetailPage({
         <span className="font-ledger text-xs uppercase tracking-widest text-ruled-blue">
           {districtName}, {school.region} Region
         </span>
-        <h1 className="font-display text-3xl sm:text-4xl font-semibold text-chalkboard mt-1 mb-4">
-          {school.name}
-        </h1>
-
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mt-1 mb-4">
+          <h1 className="font-display text-3xl sm:text-4xl font-semibold text-chalkboard">
+            {school.name}
+          </h1>
+          <FavoriteButton
+            schoolId={school._id.toString()}
+            initialFavorited={isFavorited}
+            isLoggedIn={!!session?.user}
+          />
+        </div>
         <div className="flex flex-wrap gap-2 mb-6">
           <span className="font-ledger text-xs bg-chalkboard text-paper-white px-3 py-1 rounded-sm">
             {school.ownershipType}

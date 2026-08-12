@@ -62,7 +62,7 @@ export default function SignupPage() {
                 : "bg-transparent text-ink-soft border-ink-soft/40"
             }`}
           >
-            I&apos;m a parent
+            Parent/Student
           </button>
           <button
             type="button"
@@ -73,7 +73,7 @@ export default function SignupPage() {
                 : "bg-transparent text-ink-soft border-ink-soft/40"
             }`}
           >
-            I&apos;m a school rep
+            School Rep
           </button>
         </div>
 
