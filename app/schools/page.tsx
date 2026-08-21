@@ -12,6 +12,7 @@ const EMPTY_FILTERS: Filters = {
   ownershipType: "",
   level: "",
   boardingType: "",
+  curriculum: "",
 };
 
 function SchoolsPageInner() {
@@ -32,7 +33,8 @@ function SchoolsPageInner() {
     if (f.ownershipType) params.set("ownershipType", f.ownershipType);
     if (f.level) params.set("level", f.level);
     if (f.boardingType) params.set("boardingType", f.boardingType);
-
+    if (f.curriculum) params.set("curriculum", f.curriculum);
+    
     fetch(`/api/schools?${params.toString()}`)
       .then((res) => res.json())
       .then((data) => setSchools(data.schools ?? []))

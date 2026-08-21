@@ -41,7 +41,7 @@ export default function SignupPage() {
       return;
     }
 
-    router.push("/");
+    router.push(role === "school_rep" ? "/register-school" : "/");
     router.refresh();
   }
 

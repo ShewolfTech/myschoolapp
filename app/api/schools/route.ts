@@ -13,6 +13,7 @@ export async function GET(request: NextRequest) {
   const ownershipType = params.get("ownershipType");
   const level = params.get("level");
   const boardingType = params.get("boardingType");
+  const curriculum = params.get("curriculum");
 
   const query: Record<string, unknown> = { status: "approved" };
 
@@ -24,6 +25,7 @@ export async function GET(request: NextRequest) {
   if (ownershipType) query.ownershipType = ownershipType;
   if (level) query.levels = level;
   if (boardingType) query.boardingType = boardingType;
+  if (curriculum) query.curriculum = curriculum;
 
   const schools = await School.find(query)
     .select("name slug region district ownershipType levels boardingType curriculum")

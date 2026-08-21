@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import slugify from "slugify";
 import { auth } from "@/lib/auth";
 import { connectDB } from "@/lib/db";
 import { School, OWNERSHIP_TYPES, SCHOOL_LEVELS, BOARDING_TYPES, CURRICULUM_TYPES } from "@/models/School";
@@ -36,42 +35,53 @@ const schoolInputSchema = z.object({
   feeStructure: z.array(feeItemSchema).default([]),
 });
 
-async function getSessionUser() {
+async function assertOwnership(userId: string, schoolId: string) {
+  const user = await User.findById(userId).select("managedSchools");
+  return user?.managedSchools?.some((id: { toString(): string }) => id.toString() === schoolId) ?? false;
+}
+
+// GET: fetch one of the rep's own schools (for prefilling the edit form)
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
   const session = await auth();
-  if (!session?.user || session.user.role !== "school_rep") return null;
-  return session.user;
-}
-
-// GET: list ALL schools this rep manages (a rep can now manage multiple)
-export async function GET() {
-  const sessionUser = await getSessionUser();
-  if (!sessionUser) {
+  if (!session?.user || session.user.role !== "school_rep") {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  const { id } = await params;
   await connectDB();
 
-  const user = await User.findById(sessionUser.id).populate({
-    path: "managedSchools",
-    populate: { path: "district", select: "name" },
-    options: { sort: { createdAt: -1 } },
-  });
+  const owns = await assertOwnership(session.user.id, id);
+  if (!owns) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
 
-  return NextResponse.json({ schools: user?.managedSchools ?? [] });
+  const school = await School.findById(id).populate("district", "name").lean();
+  if (!school) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+
+  return NextResponse.json({ school });
 }
 
-// POST: register a new school — no limit on how many a rep can manage
-export async function POST(request: Request) {
-  const sessionUser = await getSessionUser();
-  if (!sessionUser) {
+// PATCH: edit one of the rep's own schools — resets status to "pending" for re-review
+export async function PATCH(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const session = await auth();
+  if (!session?.user || session.user.role !== "school_rep") {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  const { id } = await params;
   await connectDB();
 
-  const user = await User.findById(sessionUser.id);
-  if (!user) {
-    return NextResponse.json({ error: "User not found" }, { status: 404 });
+  const owns = await assertOwnership(session.user.id, id);
+  if (!owns) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
   const body = await request.json();
@@ -84,23 +94,18 @@ export async function POST(request: Request) {
   }
 
   const data = parsed.data;
-  const baseSlug = slugify(data.name, { lower: true, strict: true });
-  let slug = baseSlug;
-  let suffix = 1;
-  while (await School.findOne({ slug })) {
-    slug = `${baseSlug}-${suffix++}`;
-  }
 
-  const school = await School.create({
-    ...data,
-    contact: { ...data.contact, email: data.contact.email || undefined },
-    slug,
-    status: "pending",
-    submittedBy: user._id,
-  });
+  const school = await School.findByIdAndUpdate(
+    id,
+    {
+      ...data,
+      contact: { ...data.contact, email: data.contact.email || undefined },
+      status: "pending",
+      rejectionReason: undefined,
+      verifiedAt: undefined,
+    },
+    { new: true }
+  );
 
-  user.managedSchools.push(school._id);
-  await user.save();
-
-  return NextResponse.json({ school }, { status: 201 });
+  return NextResponse.json({ school });
 }

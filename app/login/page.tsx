@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { signIn } from "next-auth/react";
+import { signIn, getSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -23,14 +23,18 @@ export default function LoginPage() {
       redirect: false,
     });
 
-    setLoading(false);
-
     if (result?.error) {
+      setLoading(false);
       setError("That email or password doesn't match our records.");
       return;
     }
 
-    router.push("/");
+    // Fetch the session directly rather than trusting result, since signIn's
+    // return value doesn't include the user's role.
+    const session = await getSession();
+    setLoading(false);
+
+    router.push(session?.user?.role === "school_rep" ? "/register-school" : "/");
     router.refresh();
   }
 

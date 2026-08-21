@@ -6,6 +6,7 @@ const REGIONS = ["All", "Central", "Eastern", "Northern", "Western"] as const;
 const OWNERSHIP_TYPES = ["All", "Government", "Private", "Government-Aided"] as const;
 const LEVELS = ["All", "Nursery", "Primary", "Secondary"] as const;
 const BOARDING_TYPES = ["All", "Day", "Boarding", "Both"] as const;
+const CURRICULUM_TYPES = ["All", "Uganda National Curriculum", "British", "American", "Other"] as const;
 
 export interface Filters {
   search: string;
@@ -14,6 +15,7 @@ export interface Filters {
   ownershipType: string;
   level: string;
   boardingType: string;
+  curriculum: string;
 }
 
 interface District {
@@ -127,7 +129,7 @@ export function SchoolFilters({
         </select>
       </div>
 
-      <div className="mt-3">
+            <div className="mt-3 flex flex-col sm:flex-row gap-3">
         <select
           value={filters.boardingType}
           onChange={(e) => onChange({ ...filters, boardingType: e.target.value })}
@@ -136,6 +138,18 @@ export function SchoolFilters({
           {BOARDING_TYPES.map((b) => (
             <option key={b} value={b === "All" ? "" : b}>
               {b === "All" ? "Day or boarding — any" : b}
+            </option>
+          ))}
+        </select>
+
+        <select
+          value={filters.curriculum}
+          onChange={(e) => onChange({ ...filters, curriculum: e.target.value })}
+          className="bg-paper-white border border-ink-soft/40 rounded-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-chalkboard"
+        >
+          {CURRICULUM_TYPES.map((c) => (
+            <option key={c} value={c === "All" ? "" : c}>
+              {c === "All" ? "Any curriculum" : c}
             </option>
           ))}
         </select>

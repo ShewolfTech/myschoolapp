@@ -61,11 +61,10 @@ const EMPTY_FORM: FormState = {
   feeStructure: [],
 };
 
-// Shape returned by GET /api/schools/mine (populated)
-interface MySchool {
+// Shape of a school document passed in for editing (already JSON-serialized by the server component)
+export interface InitialSchool {
   _id: string;
   name: string;
-  slug: string;
   region: string;
   district: { _id: string; name: string } | string;
   subCounty?: string;
@@ -79,11 +78,9 @@ interface MySchool {
   facilities: string[];
   contact: { phone: string; email?: string; website?: string };
   feeStructure: { level: string; term: string; category: string; amountUGX: number; notes?: string }[];
-  status: "pending" | "approved" | "rejected";
-  rejectionReason?: string;
 }
 
-function schoolToForm(school: MySchool): FormState {
+function schoolToForm(school: InitialSchool): FormState {
   return {
     name: school.name,
     region: school.region,
@@ -110,29 +107,23 @@ function schoolToForm(school: MySchool): FormState {
   };
 }
 
-export function RegisterSchoolForm() {
+export function RegisterSchoolForm({
+  mode,
+  schoolId,
+  initialSchool,
+}: {
+  mode: "create" | "edit";
+  schoolId?: string;
+  initialSchool?: InitialSchool;
+}) {
   const router = useRouter();
-  const [loading, setLoading] = useState(true);
-  const [existing, setExisting] = useState<MySchool | null>(null);
-  const [editing, setEditing] = useState(false);
-  const [form, setForm] = useState<FormState>(EMPTY_FORM);
+  const [form, setForm] = useState<FormState>(
+    initialSchool ? schoolToForm(initialSchool) : EMPTY_FORM
+  );
   const [districts, setDistricts] = useState<District[]>([]);
   const [facilityInput, setFacilityInput] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
-
-  // Load the rep's existing school, if any
-  useEffect(() => {
-    fetch("/api/schools/mine")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.school) {
-          setExisting(data.school);
-          setForm(schoolToForm(data.school));
-        }
-      })
-      .finally(() => setLoading(false));
-  }, []);
 
   // Cascading district list
   useEffect(() => {
@@ -228,8 +219,9 @@ export function RegisterSchoolForm() {
         })),
     };
 
-    const res = await fetch("/api/schools/mine", {
-      method: existing ? "PATCH" : "POST",
+    const url = mode === "edit" ? `/api/schools/mine/${schoolId}` : "/api/schools/mine";
+    const res = await fetch(url, {
+      method: mode === "edit" ? "PATCH" : "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
@@ -242,77 +234,22 @@ export function RegisterSchoolForm() {
       return;
     }
 
-    setExisting(data.school);
-    setEditing(false);
+    router.push("/register-school");
     router.refresh();
-  }
-
-  if (loading) {
-    return <p className="text-ink-soft font-ledger text-sm">Loading&hellip;</p>;
-  }
-
-  // Show status view instead of the form, unless the rep chose to edit
-  if (existing && !editing) {
-    const statusColor =
-      existing.status === "approved"
-        ? "text-chalkboard"
-        : existing.status === "rejected"
-        ? "text-margin-red"
-        : "text-stamp-gold";
-
-    return (
-      <div className="bg-paper-white border border-ink-soft/30 rounded-sm p-8">
-        <h1 className="font-display text-2xl font-semibold text-chalkboard mb-2">
-          {existing.name}
-        </h1>
-        <p className={`font-ledger text-sm uppercase tracking-wide mb-4 ${statusColor}`}>
-          Status: {existing.status}
-        </p>
-
-        {existing.status === "pending" && (
-          <p className="text-ink-soft mb-6">
-            Your submission is awaiting review by our team. We&apos;ll notify you once
-            it&apos;s approved. You can still edit the details below while you wait.
-          </p>
-        )}
-        {existing.status === "approved" && (
-          <p className="text-ink-soft mb-6">
-            Your school is live in the directory.{" "}
-            <a href={`/schools/${existing.slug}`} className="text-chalkboard font-semibold hover:text-margin-red">
-              View your public listing →
-            </a>{" "}
-            Editing will send it back for a quick re-review before changes go live.
-          </p>
-        )}
-        {existing.status === "rejected" && (
-          <div className="mb-6">
-            <p className="text-ink-soft mb-2">
-              Your submission wasn&apos;t approved. Please review the note below, make
-              the necessary changes, and resubmit.
-            </p>
-            {existing.rejectionReason && (
-              <p className="bg-margin-red/10 border border-margin-red/30 text-margin-red text-sm rounded-sm px-4 py-3">
-                {existing.rejectionReason}
-              </p>
-            )}
-          </div>
-        )}
-
-        <button
-          onClick={() => setEditing(true)}
-          className="bg-chalkboard text-paper-white font-ledger text-sm rounded-sm px-5 py-3 hover:bg-chalkboard-dark transition-colors"
-        >
-          Edit details
-        </button>
-      </div>
-    );
   }
 
   return (
     <form onSubmit={handleSubmit} className="bg-paper-white border border-ink-soft/30 rounded-sm p-8 space-y-6">
       <h1 className="font-display text-2xl font-semibold text-chalkboard">
-        {existing ? "Edit your school" : "Register your school"}
+        {mode === "edit" ? "Edit school" : "Register a school"}
       </h1>
+
+      {mode === "edit" && (
+        <p className="text-sm text-ink-soft -mt-4">
+          Saving changes will send this listing back for a quick re-review
+          before it&apos;s live again.
+        </p>
+      )}
 
       <div>
         <label className="block text-sm text-ink-soft mb-1">School name</label>
@@ -605,20 +542,15 @@ export function RegisterSchoolForm() {
           disabled={submitting}
           className="bg-chalkboard text-paper-white font-ledger text-sm rounded-sm px-6 py-3 hover:bg-chalkboard-dark transition-colors disabled:opacity-60"
         >
-          {submitting ? "Submitting..." : existing ? "Save & resubmit for review" : "Submit for review"}
+          {submitting ? "Submitting..." : mode === "edit" ? "Save & resubmit for review" : "Submit for review"}
         </button>
-        {existing && (
-          <button
-            type="button"
-            onClick={() => {
-              setEditing(false);
-              setForm(schoolToForm(existing));
-            }}
-            className="text-ink-soft font-ledger text-sm px-4 py-3 hover:text-chalkboard"
-          >
-            Cancel
-          </button>
-        )}
+        <button
+          type="button"
+          onClick={() => router.push("/register-school")}
+          className="text-ink-soft font-ledger text-sm px-4 py-3 hover:text-chalkboard"
+        >
+          Cancel
+        </button>
       </div>
     </form>
   );
