@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { connectDB } from "@/lib/db";
 import { School, IFeeItem } from "@/models/School";
 import "@/models/District";
-import { auth } from "@/lib/auth";
+import { requireAuth } from "@/lib/authHelpers";
 import { User } from "@/models/User";
 import { FavoriteButton } from "./FavoriteButton";
 
@@ -44,15 +44,21 @@ export default async function SchoolDetailPage({
     notFound();
   }
 
-  const session = await auth();
-  let isFavorited = false;
-  if (session?.user) {
-    const user = await User.findById(session.user.id).select("favorites").lean();
-    isFavorited =
-      user?.favorites?.some(
-        (favId: { toString(): string }) => favId.toString() === school._id.toString()
-      ) ?? false;
-  }
+  const session = await requireAuth();
+  // let isFavorited = false;
+  // if (session?.user) {
+  //   const user = await User.findById(session.user.id).select("favorites").lean();
+  //   isFavorited =
+  //     user?.favorites?.some(
+  //       (favId: { toString(): string }) => favId.toString() === school._id.toString()
+  //     ) ?? false;
+  // }
+
+  const user = await User.findById(session.user.id).select("favorites").lean();
+  const isFavorited =
+    user?.favorites?.some(
+      (favId: { toString(): string }) => favId.toString() === school._id.toString()
+    ) ?? false;
 
   const districtName = (school.district as unknown as { name: string })?.name ?? "";
   const feeGroups = groupFeesByTerm(school.feeStructure);
@@ -74,7 +80,7 @@ export default async function SchoolDetailPage({
           <FavoriteButton
             schoolId={school._id.toString()}
             initialFavorited={isFavorited}
-            isLoggedIn={!!session?.user}
+            isLoggedIn={true}
           />
         </div>
         <div className="flex flex-wrap gap-2 mb-6">

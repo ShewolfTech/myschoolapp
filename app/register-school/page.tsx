@@ -2,6 +2,7 @@ import Link from "next/link";
 import { requireRole } from "@/lib/authHelpers";
 import { connectDB } from "@/lib/db";
 import { User } from "@/models/User";
+import "@/models/School";
 import "@/models/District";
 
 interface ManagedSchool {
