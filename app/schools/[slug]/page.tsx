@@ -107,6 +107,31 @@ export default async function SchoolDetailPage({
           <p className="text-ink-soft mb-6 leading-relaxed">{school.description}</p>
         )}
 
+        {(school.images?.length > 0 || school.video) && (
+          <section className="mb-8">
+            {school.images?.length > 0 && (
+              <div className="grid grid-cols-3 gap-2 mb-3">
+                {school.images.map((src: string) => (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    key={src}
+                    src={src}
+                    alt={school.name}
+                    className="w-full aspect-square object-cover rounded-sm border border-ink-soft/30"
+                  />
+                ))}
+              </div>
+            )}
+            {school.video && (
+              <video
+                src={school.video}
+                controls
+                className="w-full rounded-sm border border-ink-soft/30"
+              />
+            )}
+          </section>
+        )}
+
         {school.facilities?.length > 0 && (
           <section className="mb-8">
             <h2 className="font-display text-lg font-semibold text-chalkboard mb-2">

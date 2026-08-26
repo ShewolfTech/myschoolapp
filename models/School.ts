@@ -53,6 +53,7 @@ export interface ISchool {
   description?: string;
   facilities: string[]; // e.g. ["Library", "Science Lab", "Dormitories", "Sports field"]
   images: string[]; // URLs (e.g. Cloudinary)
+  video?: string;
 
   contact: {
     phone: string;
@@ -110,6 +111,7 @@ const SchoolSchema = new Schema<ISchool>(
     description: { type: String, trim: true },
     facilities: [{ type: String, trim: true }],
     images: [{ type: String, trim: true }],
+    video: { type: String, trim: true },
 
     contact: {
       phone: { type: String, required: true, trim: true },

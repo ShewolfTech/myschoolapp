@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { MediaUploader } from "./MediaUploader";
 
 const REGIONS = ["Central", "Eastern", "Northern", "Western"];
 const OWNERSHIP_TYPES = ["Government", "Private", "Government-Aided"];
@@ -40,6 +41,8 @@ interface FormState {
   contactEmail: string;
   contactWebsite: string;
   feeStructure: FeeRow[];
+  images: string[];
+  video: string;
 }
 
 const EMPTY_FORM: FormState = {
@@ -59,6 +62,8 @@ const EMPTY_FORM: FormState = {
   contactEmail: "",
   contactWebsite: "",
   feeStructure: [],
+  images: [],
+  video: "",
 };
 
 // Shape of a school document passed in for editing (already JSON-serialized by the server component)
@@ -78,6 +83,8 @@ export interface InitialSchool {
   facilities: string[];
   contact: { phone: string; email?: string; website?: string };
   feeStructure: { level: string; term: string; category: string; amountUGX: number; notes?: string }[];
+  images: string[];
+  video?: string;
 }
 
 function schoolToForm(school: InitialSchool): FormState {
@@ -104,6 +111,8 @@ function schoolToForm(school: InitialSchool): FormState {
       amountUGX: String(f.amountUGX),
       notes: f.notes ?? "",
     })),
+    images: school.images ?? [],
+    video: school.video ?? "",
   };
 }
 
@@ -203,6 +212,8 @@ export function RegisterSchoolForm({
       foundedYear: form.foundedYear ? Number(form.foundedYear) : undefined,
       description: form.description || undefined,
       facilities: form.facilities,
+      images: form.images,
+      video: form.video || undefined,
       contact: {
         phone: form.contactPhone,
         email: form.contactEmail || undefined,
@@ -437,6 +448,16 @@ export function RegisterSchoolForm({
             </span>
           ))}
         </div>
+      </div>
+
+      <div className="border-t border-dashed border-ink-soft/40 pt-6">
+        <h2 className="font-display text-lg font-semibold text-chalkboard mb-3">Photos & video</h2>
+        <MediaUploader
+          images={form.images}
+          onImagesChange={(images) => setForm({ ...form, images })}
+          video={form.video}
+          onVideoChange={(video) => setForm({ ...form, video })}
+        />
       </div>
 
       <div className="border-t border-dashed border-ink-soft/40 pt-6">

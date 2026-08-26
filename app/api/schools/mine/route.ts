@@ -28,6 +28,8 @@ const schoolInputSchema = z.object({
   foundedYear: z.number().int().optional(),
   description: z.string().trim().optional(),
   facilities: z.array(z.string().trim()).default([]),
+  images: z.array(z.string().url()).max(3).default([]),
+  video: z.string().url().optional().or(z.literal("")),
   contact: z.object({
     phone: z.string().trim().min(6),
     email: z.string().trim().email().optional().or(z.literal("")),
