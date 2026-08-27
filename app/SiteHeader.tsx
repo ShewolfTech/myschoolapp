@@ -48,6 +48,9 @@ export async function SiteHeader() {
           )}
           {session?.user ? (
             <>
+              <Link href="/change-password" className="hover:text-stamp-gold transition-colors">
+                Change password
+              </Link>
               <span className="text-paper-white/70">
                 {session.user.name} &middot; {session.user.role}
               </span>
