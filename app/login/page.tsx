@@ -59,19 +59,21 @@ export default function LoginPage() {
               className="w-full bg-white border border-ink-soft/40 rounded-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-chalkboard"
             />
           </div>
-
           <div>
-            <label className="block text-sm text-ink-soft mb-1" htmlFor="password">
-              Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-white border border-ink-soft/40 rounded-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-chalkboard"
-            />
+              <label className="block text-sm text-ink-soft" htmlFor="password">
+                Password
+              </label>
+              <input
+                id="password"
+                type="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full bg-white border border-ink-soft/40 rounded-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-chalkboard"
+              />
+            <Link href="/forgot-password" className="text-xs text-chalkboard hover:text-margin-red">
+              Forgot password?
+            </Link>
           </div>
 
           {error && <p className="text-sm text-margin-red">{error}</p>}

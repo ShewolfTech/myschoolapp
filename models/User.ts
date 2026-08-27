@@ -10,6 +10,8 @@ export interface IUser {
   emailVerified?: Date | null;
   image?: string;
   passwordHash: string;
+  resetPasswordTokenHash?: string;
+  resetPasswordExpires?: Date;
   role: UserRole;
 
   // Parents only: schools they've saved/favorited
@@ -31,7 +33,8 @@ const UserSchema = new Schema<IUser>(
     emailVerified: { type: Date, default: null },
     image: { type: String },
     passwordHash: { type: String, required: true, select: false }, // select:false so it's never returned by default queries
-
+    resetPasswordTokenHash: { type: String, select: false },
+    resetPasswordExpires: { type: Date, select: false },
     role: {
       type: String,
       enum: USER_ROLES,
