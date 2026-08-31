@@ -3,6 +3,9 @@
 import { Suspense, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import { PasswordInput } from "../PasswordInput";
+import { PasswordRequirements } from "../PasswordRequirements";
+import { isPasswordStrong, PASSWORD_REQUIREMENTS_MESSAGE } from "@/lib/passwordValidation";
 
 function ResetPasswordInner() {
   const searchParams = useSearchParams();
@@ -21,6 +24,11 @@ function ResetPasswordInner() {
 
     if (password !== confirmPassword) {
       setError("Passwords don't match.");
+      return;
+    }
+
+    if (!isPasswordStrong(password)) {
+      setError(PASSWORD_REQUIREMENTS_MESSAGE);
       return;
     }
 
@@ -77,29 +85,26 @@ function ResetPasswordInner() {
           <label className="block text-sm text-ink-soft mb-1" htmlFor="password">
             New password
           </label>
-          <input
+          <PasswordInput
             id="password"
-            type="password"
             required
-            minLength={8}
+            autoComplete="new-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full bg-white border border-ink-soft/40 rounded-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-chalkboard"
           />
+          <PasswordRequirements password={password} />
         </div>
 
         <div>
           <label className="block text-sm text-ink-soft mb-1" htmlFor="confirmPassword">
             Confirm new password
           </label>
-          <input
+          <PasswordInput
             id="confirmPassword"
-            type="password"
             required
-            minLength={8}
+            autoComplete="new-password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            className="w-full bg-white border border-ink-soft/40 rounded-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-chalkboard"
           />
         </div>
 

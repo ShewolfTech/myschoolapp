@@ -3,11 +3,12 @@ import { z } from "zod";
 import bcrypt from "bcryptjs";
 import { connectDB } from "@/lib/db";
 import { User } from "@/models/User";
+import { PASSWORD_REGEX, PASSWORD_REQUIREMENTS_MESSAGE } from "@/lib/passwordValidation";
 
 const signupSchema = z.object({
   name: z.string().trim().min(2, "Name must be at least 2 characters"),
   email: z.string().trim().toLowerCase().email("Enter a valid email"),
-  password: z.string().min(8, "Password must be at least 8 characters"),
+  password: z.string().regex(PASSWORD_REGEX, PASSWORD_REQUIREMENTS_MESSAGE),
   // Public signup only ever creates parent or school_rep accounts.
   // Admin accounts are created directly in the database/seed script.
   role: z.enum(["parent", "school_rep"]),

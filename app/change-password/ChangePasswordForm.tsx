@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { PasswordInput } from "../PasswordInput";
+import { PasswordRequirements } from "../PasswordRequirements";
+import { isPasswordStrong, PASSWORD_REQUIREMENTS_MESSAGE } from "@/lib/passwordValidation";
 
 export function ChangePasswordForm() {
   const router = useRouter();
@@ -19,6 +22,11 @@ export function ChangePasswordForm() {
 
     if (newPassword !== confirmPassword) {
       setError("New passwords don't match.");
+      return;
+    }
+
+    if (!isPasswordStrong(newPassword)) {
+      setError(PASSWORD_REQUIREMENTS_MESSAGE);
       return;
     }
 
@@ -47,70 +55,66 @@ export function ChangePasswordForm() {
 
   return (
     <div className="w-full max-w-sm bg-paper-white border border-ink-soft/30 rounded-sm p-8">
-        <h1 className="font-display text-2xl font-semibold text-chalkboard mb-6">
-          Change password
-        </h1>
+      <h1 className="font-display text-2xl font-semibold text-chalkboard mb-6">
+        Change password
+      </h1>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm text-ink-soft mb-1" htmlFor="currentPassword">
-              Current password
-            </label>
-            <input
-              id="currentPassword"
-              type="password"
-              required
-              value={currentPassword}
-              onChange={(e) => setCurrentPassword(e.target.value)}
-              className="w-full bg-white border border-ink-soft/40 rounded-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-chalkboard"
-            />
-          </div>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label className="block text-sm text-ink-soft mb-1" htmlFor="currentPassword">
+            Current password
+          </label>
+          <PasswordInput
+            id="currentPassword"
+            required
+            autoComplete="current-password"
+            value={currentPassword}
+            onChange={(e) => setCurrentPassword(e.target.value)}
+          />
+        </div>
 
-          <div>
-            <label className="block text-sm text-ink-soft mb-1" htmlFor="newPassword">
-              New password
-            </label>
-            <input
-              id="newPassword"
-              type="password"
-              required
-              minLength={8}
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              className="w-full bg-white border border-ink-soft/40 rounded-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-chalkboard"
-            />
-          </div>
+        <div>
+          <label className="block text-sm text-ink-soft mb-1" htmlFor="newPassword">
+            New password
+          </label>
+          <PasswordInput
+            id="newPassword"
+            required
+            autoComplete="new-password"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+          />
+          <PasswordRequirements password={newPassword} />
+        </div>
 
-          <div>
-            <label className="block text-sm text-ink-soft mb-1" htmlFor="confirmPassword">
-              Confirm new password
-            </label>
-            <input
-              id="confirmPassword"
-              type="password"
-              required
-              minLength={8}
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full bg-white border border-ink-soft/40 rounded-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-chalkboard"
-            />
-          </div>
+        <div>
+          <label className="block text-sm text-ink-soft mb-1" htmlFor="confirmPassword">
+            Confirm new password
+          </label>
+          <PasswordInput
+            id="confirmPassword"
+            required
+            autoComplete="new-password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+        </div>
 
-          {error && <p className="text-sm text-margin-red">{error}</p>}
-          {success && (
-            <p className="text-sm text-chalkboard bg-paper-dark rounded-sm px-4 py-3">
-              Password changed successfully.
-            </p>
-          )}
+        {error && <p className="text-sm text-margin-red">{error}</p>}
+        {success && (
+          <p className="text-sm text-chalkboard bg-paper-dark rounded-sm px-4 py-3">
+            Password changed successfully.
+          </p>
+        )}
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-chalkboard text-paper-white font-ledger text-sm rounded-sm py-3 hover:bg-chalkboard-dark transition-colors disabled:opacity-60"
-          >
-            {loading ? "Changing..." : "Change password"}
-          </button>
-        </form>
-      </div>
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full bg-chalkboard text-paper-white font-ledger text-sm rounded-sm py-3 hover:bg-chalkboard-dark transition-colors disabled:opacity-60"
+        >
+          {loading ? "Changing..." : "Change password"}
+        </button>
+      </form>
+    </div>
   );
 }

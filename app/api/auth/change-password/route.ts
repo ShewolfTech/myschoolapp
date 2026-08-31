@@ -4,10 +4,11 @@ import bcrypt from "bcryptjs";
 import { auth } from "@/lib/auth";
 import { connectDB } from "@/lib/db";
 import { User } from "@/models/User";
+import { PASSWORD_REGEX, PASSWORD_REQUIREMENTS_MESSAGE } from "@/lib/passwordValidation";
 
 const schema = z.object({
   currentPassword: z.string().min(1, "Enter your current password"),
-  newPassword: z.string().min(8, "New password must be at least 8 characters"),
+  newPassword: z.string().regex(PASSWORD_REGEX, PASSWORD_REQUIREMENTS_MESSAGE),
 });
 
 export async function POST(request: Request) {

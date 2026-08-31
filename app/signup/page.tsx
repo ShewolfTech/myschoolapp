@@ -4,12 +4,16 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { PasswordInput } from "../PasswordInput";
+import { PasswordRequirements } from "../PasswordRequirements";
+import { isPasswordStrong, PASSWORD_REQUIREMENTS_MESSAGE } from "@/lib/passwordValidation";
 
 export default function SignupPage() {
   const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [role, setRole] = useState<"parent" | "school_rep">("parent");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -17,6 +21,17 @@ export default function SignupPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
+
+    if (password !== confirmPassword) {
+      setError("Passwords don't match.");
+      return;
+    }
+
+    if (!isPasswordStrong(password)) {
+      setError(PASSWORD_REQUIREMENTS_MESSAGE);
+      return;
+    }
+
     setLoading(true);
 
     const res = await fetch("/api/auth/signup", {
@@ -62,7 +77,7 @@ export default function SignupPage() {
                 : "bg-transparent text-ink-soft border-ink-soft/40"
             }`}
           >
-            Parent/Student
+            I&apos;m a parent
           </button>
           <button
             type="button"
@@ -73,7 +88,7 @@ export default function SignupPage() {
                 : "bg-transparent text-ink-soft border-ink-soft/40"
             }`}
           >
-            School Rep
+            I represent a school
           </button>
         </div>
 
@@ -110,16 +125,27 @@ export default function SignupPage() {
             <label className="block text-sm text-ink-soft mb-1" htmlFor="password">
               Password
             </label>
-            <input
+            <PasswordInput
               id="password"
-              type="password"
               required
-              minLength={8}
+              autoComplete="new-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-white border border-ink-soft/40 rounded-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-chalkboard"
             />
-            <p className="text-xs text-ink-soft/70 mt-1">At least 8 characters.</p>
+            <PasswordRequirements password={password} />
+          </div>
+
+          <div>
+            <label className="block text-sm text-ink-soft mb-1" htmlFor="confirmPassword">
+              Confirm password
+            </label>
+            <PasswordInput
+              id="confirmPassword"
+              required
+              autoComplete="new-password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
           </div>
 
           {error && <p className="text-sm text-margin-red">{error}</p>}

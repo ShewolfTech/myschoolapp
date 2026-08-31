@@ -4,6 +4,7 @@ import { useState } from "react";
 import { signIn, getSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { PasswordInput } from "../PasswordInput";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -29,8 +30,6 @@ export default function LoginPage() {
       return;
     }
 
-    // Fetch the session directly rather than trusting result, since signIn's
-    // return value doesn't include the user's role.
     const session = await getSession();
     setLoading(false);
 
@@ -59,21 +58,23 @@ export default function LoginPage() {
               className="w-full bg-white border border-ink-soft/40 rounded-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-chalkboard"
             />
           </div>
+
           <div>
+            <div className="flex items-center justify-between mb-1">
               <label className="block text-sm text-ink-soft" htmlFor="password">
                 Password
               </label>
-              <input
-                id="password"
-                type="password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-white border border-ink-soft/40 rounded-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-chalkboard"
-              />
-            <Link href="/forgot-password" className="text-xs text-chalkboard hover:text-margin-red">
-              Forgot password?
-            </Link>
+              <Link href="/forgot-password" className="text-xs text-chalkboard hover:text-margin-red">
+                Forgot password?
+              </Link>
+            </div>
+            <PasswordInput
+              id="password"
+              required
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
           </div>
 
           {error && <p className="text-sm text-margin-red">{error}</p>}
