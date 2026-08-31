@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState, useCallback } from "react";
 
 const TABS = ["pending", "approved", "rejected", "all"] as const;
@@ -17,13 +18,16 @@ interface AdminSchool {
   createdAt: string;
 }
 
+const STATUS_STYLES: Record<string, string> = {
+  approved: "bg-chalkboard text-paper-white",
+  pending: "bg-stamp-gold text-ink",
+  rejected: "bg-margin-red text-paper-white",
+};
+
 export function AdminDashboard() {
   const [tab, setTab] = useState<Tab>("pending");
   const [schools, setSchools] = useState<AdminSchool[]>([]);
   const [loading, setLoading] = useState(true);
-  const [rejectingId, setRejectingId] = useState<string | null>(null);
-  const [rejectReason, setRejectReason] = useState("");
-  const [actionError, setActionError] = useState<string | null>(null);
 
   const load = useCallback((currentTab: Tab) => {
     setLoading(true);
@@ -38,42 +42,6 @@ export function AdminDashboard() {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     load(tab);
   }, [tab, load]);
-
-  async function approve(id: string) {
-    setActionError(null);
-    const res = await fetch(`/api/admin/schools/${id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status: "approved" }),
-    });
-    if (!res.ok) {
-      const data = await res.json();
-      setActionError(data.error ?? "Failed to approve");
-      return;
-    }
-    load(tab);
-  }
-
-  async function reject(id: string) {
-    if (!rejectReason.trim()) {
-      setActionError("Please provide a reason for rejecting.");
-      return;
-    }
-    setActionError(null);
-    const res = await fetch(`/api/admin/schools/${id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status: "rejected", rejectionReason: rejectReason.trim() }),
-    });
-    if (!res.ok) {
-      const data = await res.json();
-      setActionError(data.error ?? "Failed to reject");
-      return;
-    }
-    setRejectingId(null);
-    setRejectReason("");
-    load(tab);
-  }
 
   return (
     <div>
@@ -93,10 +61,6 @@ export function AdminDashboard() {
         ))}
       </div>
 
-      {actionError && (
-        <p className="text-sm text-margin-red mb-4">{actionError}</p>
-      )}
-
       {loading ? (
         <p className="text-ink-soft font-ledger text-sm">Loading&hellip;</p>
       ) : schools.length === 0 ? (
@@ -106,85 +70,37 @@ export function AdminDashboard() {
           {schools.map((school) => (
             <li
               key={school._id}
-              className="bg-paper-white border border-ink-soft/30 rounded-sm p-5"
+              className="bg-paper-white border border-ink-soft/30 rounded-sm p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
             >
-              <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
-                <div>
-                  <p className="font-display text-lg font-semibold text-chalkboard">
-                    {school.name}
-                  </p>
-                  <p className="text-sm text-ink-soft">
-                    {school.district?.name ?? "—"}, {school.region} Region &middot;{" "}
-                    {school.ownershipType}
-                  </p>
-                  <p className="text-xs text-ink-soft/70 mt-1">
-                    Submitted by {school.submittedBy?.name ?? "unknown"} (
-                    {school.submittedBy?.email ?? "—"}) &middot; Contact:{" "}
-                    {school.contact.phone}
-                  </p>
-                </div>
-
-                {school.status === "pending" && (
-                  <div className="flex flex-col gap-2 shrink-0">
-                    <button
-                      onClick={() => approve(school._id)}
-                      className="bg-chalkboard text-paper-white font-ledger text-xs rounded-sm px-4 py-2 hover:bg-chalkboard-dark transition-colors"
-                    >
-                      Approve
-                    </button>
-                    <button
-                      onClick={() => {
-                        setRejectingId(school._id);
-                        setRejectReason("");
-                        setActionError(null);
-                      }}
-                      className="border border-margin-red text-margin-red font-ledger text-xs rounded-sm px-4 py-2 hover:bg-margin-red/10 transition-colors"
-                    >
-                      Reject
-                    </button>
-                  </div>
-                )}
-
-                {school.status !== "pending" && (
-                  <span
-                    className={`font-ledger text-xs uppercase px-3 py-1 rounded-sm self-start ${
-                      school.status === "approved"
-                        ? "bg-chalkboard text-paper-white"
-                        : "bg-margin-red text-paper-white"
-                    }`}
-                  >
-                    {school.status}
-                  </span>
-                )}
+              <div>
+                <p className="font-display text-lg font-semibold text-chalkboard">
+                  {school.name}
+                </p>
+                <p className="text-sm text-ink-soft">
+                  {school.district?.name ?? "—"}, {school.region} Region &middot;{" "}
+                  {school.ownershipType}
+                </p>
+                <p className="text-xs text-ink-soft/70 mt-1">
+                  Submitted by {school.submittedBy?.name ?? "unknown"} (
+                  {school.submittedBy?.email ?? "—"})
+                </p>
               </div>
 
-              {rejectingId === school._id && (
-                <div className="mt-4 border-t border-dashed border-ink-soft/40 pt-4">
-                  <label className="block text-sm text-ink-soft mb-1">
-                    Reason for rejection (shown to the school rep)
-                  </label>
-                  <textarea
-                    rows={2}
-                    value={rejectReason}
-                    onChange={(e) => setRejectReason(e.target.value)}
-                    className="w-full bg-white border border-ink-soft/40 rounded-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-margin-red mb-2"
-                  />
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => reject(school._id)}
-                      className="bg-margin-red text-paper-white font-ledger text-xs rounded-sm px-4 py-2"
-                    >
-                      Confirm rejection
-                    </button>
-                    <button
-                      onClick={() => setRejectingId(null)}
-                      className="text-ink-soft font-ledger text-xs px-4 py-2"
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </div>
-              )}
+              <div className="flex items-center gap-3 shrink-0">
+                <span
+                  className={`font-ledger text-xs uppercase px-3 py-1 rounded-sm ${
+                    STATUS_STYLES[school.status] ?? "bg-paper-dark text-ink"
+                  }`}
+                >
+                  {school.status}
+                </span>
+                <Link
+                  href={`/admin/schools/${school._id}`}
+                  className="bg-chalkboard text-paper-white font-ledger text-xs rounded-sm px-4 py-2 hover:bg-chalkboard-dark transition-colors"
+                >
+                  Review
+                </Link>
+              </div>
             </li>
           ))}
         </ul>
