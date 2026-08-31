@@ -101,6 +101,11 @@ export default async function SchoolDetailPage({
           <span className="font-ledger text-xs bg-paper-dark text-ink px-3 py-1 rounded-sm">
             {school.curriculum}
           </span>
+          {school.moeRegistrationNumber && (
+            <span className="font-ledger text-xs bg-ruled-blue text-paper-white px-3 py-1 rounded-sm">
+              MoE Reg. No: {school.moeRegistrationNumber}
+            </span>
+          )}
         </div>
 
         {school.description && (

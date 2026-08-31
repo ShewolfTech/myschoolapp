@@ -35,6 +35,7 @@ interface FormState {
   boardingType: string;
   curriculum: string;
   foundedYear: string;
+  moeRegistrationNumber: string;
   description: string;
   facilities: string[];
   contactPhone: string;
@@ -56,6 +57,7 @@ const EMPTY_FORM: FormState = {
   boardingType: "",
   curriculum: "Uganda National Curriculum",
   foundedYear: "",
+  moeRegistrationNumber: "",
   description: "",
   facilities: [],
   contactPhone: "",
@@ -66,7 +68,6 @@ const EMPTY_FORM: FormState = {
   video: "",
 };
 
-// Shape of a school document passed in for editing (already JSON-serialized by the server component)
 export interface InitialSchool {
   _id: string;
   name: string;
@@ -79,6 +80,7 @@ export interface InitialSchool {
   boardingType: string;
   curriculum: string;
   foundedYear?: number;
+  moeRegistrationNumber?: string;
   description?: string;
   facilities: string[];
   contact: { phone: string; email?: string; website?: string };
@@ -99,6 +101,7 @@ function schoolToForm(school: InitialSchool): FormState {
     boardingType: school.boardingType,
     curriculum: school.curriculum,
     foundedYear: school.foundedYear ? String(school.foundedYear) : "",
+    moeRegistrationNumber: school.moeRegistrationNumber ?? "",
     description: school.description ?? "",
     facilities: school.facilities,
     contactPhone: school.contact.phone,
@@ -134,7 +137,6 @@ export function RegisterSchoolForm({
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
-  // Cascading district list
   useEffect(() => {
     if (!form.region) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -210,6 +212,7 @@ export function RegisterSchoolForm({
       boardingType: form.boardingType,
       curriculum: form.curriculum,
       foundedYear: form.foundedYear ? Number(form.foundedYear) : undefined,
+      moeRegistrationNumber: form.moeRegistrationNumber || undefined,
       description: form.description || undefined,
       facilities: form.facilities,
       images: form.images,
@@ -394,6 +397,18 @@ export function RegisterSchoolForm({
           value={form.foundedYear}
           onChange={(e) => setForm({ ...form, foundedYear: e.target.value })}
           className="w-32 bg-white border border-ink-soft/40 rounded-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-chalkboard"
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm text-ink-soft mb-1">
+          Ministry of Education Registration Number (optional)
+        </label>
+        <input
+          value={form.moeRegistrationNumber}
+          onChange={(e) => setForm({ ...form, moeRegistrationNumber: e.target.value })}
+          placeholder="e.g. MOE/2024/UG/00123"
+          className="w-full bg-white border border-ink-soft/40 rounded-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-chalkboard"
         />
       </div>
 

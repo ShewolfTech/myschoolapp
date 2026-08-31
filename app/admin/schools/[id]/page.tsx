@@ -48,9 +48,8 @@ export default async function AdminSchoolReviewPage({
             {districtName}, {school.region} Region
           </span>
           <span
-            className={`font-ledger text-xs uppercase px-3 py-1 rounded-sm ${
-              STATUS_STYLES[school.status] ?? "bg-paper-dark text-ink"
-            }`}
+            className={`font-ledger text-xs uppercase px-3 py-1 rounded-sm ${STATUS_STYLES[school.status] ?? "bg-paper-dark text-ink"
+              }`}
           >
             {school.status}
           </span>
@@ -78,6 +77,11 @@ export default async function AdminSchoolReviewPage({
           {school.foundedYear && (
             <span className="font-ledger text-xs bg-paper-dark text-ink px-3 py-1 rounded-sm">
               Founded {school.foundedYear}
+            </span>
+          )}
+          {school.moeRegistrationNumber && (
+            <span className="font-ledger text-xs bg-ruled-blue text-paper-white px-3 py-1 rounded-sm">
+              MoE Reg. No: {school.moeRegistrationNumber}
             </span>
           )}
         </div>

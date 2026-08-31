@@ -49,7 +49,7 @@ export interface ISchool {
   boardingType: BoardingType;
   curriculum: CurriculumType;
   foundedYear?: number;
-
+  moeRegistrationNumber?: string;
   description?: string;
   facilities: string[]; // e.g. ["Library", "Science Lab", "Dormitories", "Sports field"]
   images: string[]; // URLs (e.g. Cloudinary)
@@ -107,7 +107,7 @@ const SchoolSchema = new Schema<ISchool>(
     boardingType: { type: String, enum: BOARDING_TYPES, required: true },
     curriculum: { type: String, enum: CURRICULUM_TYPES, default: "Uganda National Curriculum" },
     foundedYear: { type: Number },
-
+    moeRegistrationNumber: { type: String, trim: true },
     description: { type: String, trim: true },
     facilities: [{ type: String, trim: true }],
     images: [{ type: String, trim: true }],
