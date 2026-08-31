@@ -15,6 +15,7 @@ export function FavoriteButton({
   const router = useRouter();
   const [favorited, setFavorited] = useState(initialFavorited);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function toggle() {
     if (!isLoggedIn) {
@@ -22,28 +23,36 @@ export function FavoriteButton({
       return;
     }
 
+    setError(null);
     setLoading(true);
     const method = favorited ? "DELETE" : "POST";
     const res = await fetch(`/api/favorites/${schoolId}`, { method });
+    const data = await res.json().catch(() => ({}));
     setLoading(false);
 
-    if (res.ok) {
-      setFavorited(!favorited);
+    if (!res.ok) {
+      setError(data.error ?? "Something went wrong. Please try again.");
+      return;
     }
+
+    setFavorited(!favorited);
   }
 
   return (
-    <button
-      onClick={toggle}
-      disabled={loading}
-      className={`inline-flex items-center gap-2 rounded-sm border px-4 py-2 font-ledger text-sm transition-colors disabled:opacity-60 ${
-        favorited
-          ? "bg-margin-red text-paper-white border-margin-red"
-          : "bg-transparent text-margin-red border-margin-red hover:bg-margin-red/10"
-      }`}
-    >
-      <span aria-hidden>{favorited ? "♥" : "♡"}</span>
-      {favorited ? "Saved" : "Save school"}
-    </button>
+    <div>
+      <button
+        onClick={toggle}
+        disabled={loading}
+        className={`inline-flex items-center gap-2 rounded-sm border px-4 py-2 font-ledger text-sm transition-colors disabled:opacity-60 ${
+          favorited
+            ? "bg-margin-red text-paper-white border-margin-red"
+            : "bg-transparent text-margin-red border-margin-red hover:bg-margin-red/10"
+        }`}
+      >
+        <span aria-hidden>{favorited ? "♥" : "♡"}</span>
+        {favorited ? "Saved" : "Save school"}
+      </button>
+      {error && <p className="text-sm text-margin-red mt-2">{error}</p>}
+    </div>
   );
 }

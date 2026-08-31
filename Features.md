@@ -4,149 +4,172 @@ A complete list of everything currently built, organized by user type, with
 steps to verify each feature works. Use this as a regression checklist
 whenever you make changes — run through it before deploying if you've
 touched anything auth- or role-related, since those are the areas most
-prone to breaking silently (a page that should be protected but isn't, or
-a feature that's now hidden for the wrong role).
+prone to breaking silently.
 
-Covers through **Step 5**. Will be updated as new steps land.
+Covers through the email notification system (post Step 5, plus everything
+added since: curriculum filter, multi-school registration, media uploads,
+password reset/change, admin review page, and transactional emails).
 
 ---
 
-## Parent (no account required)
+## Account basics (all roles)
 
-Parents can do everything below **without logging in**. An account only
-adds the ability to save favorites.
+### Sign up
+- Go to `/signup`, pick a role (parent or school rep), fill in the form
+- Password field must show a live checklist (8+ chars, uppercase, lowercase,
+  number, special character) and an example strong password
+- Confirm-password field must block submission if it doesn't match
+- Every password field (signup, login, reset, change) has a click-to-reveal
+  eye icon — confirm it toggles visibility correctly
+- After signup: you're logged in immediately, and a gold banner appears
+  site-wide saying you need to verify your email
+
+### Email verification
+- Check the inbox for the email used at signup — an activation email should
+  arrive from `noreply@myschoolapp-ug.com`
+- Click the link → should land on `/verify-email`, show "Email verified!",
+  and the site-wide banner should disappear on the next page load
+- **Restricted while unverified** (test both):
+  - Try to save a favorite as an unverified parent → should show a clear
+    inline error ("Please verify your email before saving schools."), not
+    fail silently
+  - Try to register a school as an unverified school_rep → same pattern,
+    error shows inline on the registration form
+- From the banner, click "Resend email" → confirm a fresh activation email
+  arrives and the old link still works (or a new one does — either is fine,
+  just confirm *something* usable arrives)
+- Try an expired/garbage token in the `/verify-email?token=` URL → should
+  show a clear "invalid or expired" message, not crash
+
+### Login / logout
+- Log in, refresh — should stay logged in
+- Log out from any page — should redirect home, header immediately reflects
+  logged-out state (no stale flash of the old state)
+
+### Forgot password
+- From `/login`, click "Forgot password?" → `/forgot-password`
+- Submit an email — response message is the same generic text whether or
+  not that email is registered (don't test by comparing wording, just
+  confirm no error either way for a well-formed email)
+- Check inbox for the real registered email → reset link arrives
+- Click it → `/reset-password?token=...` → set a new password (same
+  strength rules apply here too)
+- Confirm a "your password was changed" notification email arrives
+  separately from the reset email itself
+- Try reusing the same reset link a second time → should fail (token is
+  single-use)
+- Try an old/expired link → clear error message
+
+### Change password (logged in)
+- From the header, "Change password" → requires current password + new
+  password + confirm
+- Wrong current password → clear inline error, doesn't proceed
+- Success → confirms on-page, and a "password changed" notification email
+  arrives (same email as the forgot-password flow triggers)
+
+---
+
+## Parent
 
 ### Search and filter schools
-- Go to `/schools`
-- Test each filter independently, then in combination:
-  - Free-text search by school name (partial matches should work, e.g.
-    "Gayaza" finds "Gayaza High School")
-  - Region tabs (Central / Eastern / Northern / Western / All)
-  - District dropdown — should only populate with districts from the
-    currently selected region, and reset when you change region
-  - Ownership type (Government / Private / Government-Aided)
-  - Level (Nursery / Primary / Secondary)
-  - Boarding type (Day / Boarding / Both)
-- **Expected:** result count updates live, list only ever shows
-  **approved** schools (never pending/rejected ones)
-- Try a filter combination that matches nothing — should show the "No
-  schools match yet" empty state, not an error
+- `/schools` requires login — logged-out visitors get redirected to
+  `/login`, both for this page and for `/schools/[slug]` directly
+- Filters: name search, region, district (cascades from region), ownership
+  type, level, boarding type, **and curriculum** (this one's newer — confirm
+  picking "British" correctly isolates British-curriculum schools only)
+- Empty-result state shows a helpful message, not a blank screen
 
 ### View school details
-- Click into any school from the search results
-- **Expected:** region/district, ownership/level/boarding/curriculum tags,
-  description, facilities list, grouped fee table (by level + term), and
-  working "Call" / "Email" contact buttons
-- Try a school with no email set — the Email button should simply not
-  render (not show a broken link)
+- Region/district, tags, description, facilities, grouped fee table,
+  contact buttons
+- **Photos and video**: if the school rep uploaded any, they should render
+  here — a 3-photo grid plus an embedded video player if one was added
 
-### Save / unsave a school (requires login)
-- While logged out, click "Save school" on a detail page
-- **Expected:** redirects to `/login` (doesn't silently fail or error)
-- Log in as a parent, return to a school detail page, click "Save school"
-- **Expected:** button fills in and changes to "Saved"
-- Go to "Saved schools" in the nav — the school should appear there
-- Go back to the school detail page, click "Saved" to unsave
-- **Expected:** disappears from `/favorites` list
-- Log in as a **different** parent account — their saved list should be
-  empty / independent of the first account's saves
+### Save / unsave a school
+- Requires a **verified** email (see verification section above for the
+  unverified-error case)
+- Once verified: save from a detail page, confirm it shows under "Saved
+  schools" in the nav, unsave and confirm it disappears
 
 ---
 
 ## School Representative
 
-### Sign up as a school rep
-- Go to `/signup`, choose "I represent a school"
-- **Expected:** redirected to home page, logged in, header shows your
-  name + "school_rep" and a "My school" nav link
+### Multiple schools per account
+- A single school_rep account can now register more than one school (this
+  changed from the original one-school limit) — confirm by registering two
+  different schools on the same test account
+- `/register-school` is now a **dashboard** listing all of that rep's
+  schools with status badges, not a single-school status view
+- "+ Register a school" goes to `/register-school/new`; each listed school
+  has an "Edit" link to `/register-school/[id]/edit`
 
-### Register a school
-- Click "My school" → fill out the form:
-  - Required fields enforced: name, region, district, ownership type, at
-    least one level, boarding type, phone
-  - District dropdown is empty until a region is picked
-  - Add a few facilities via the tag input (Enter or "Add" button both
-    work; duplicates are prevented)
-  - Add at least one fee row; try removing a row too
-- Submit
-- **Expected:** status view showing "pending", with a note that it won't
-  appear in public search yet
-- Search for the school name at `/schools` — **should not appear** (still
-  pending)
+### Registering a school
+- Requires a **verified** email — see verification section for the
+  unverified-error case
+- Fill out the full form: basic details, cascading region/district,
+  ownership, levels (multi-select), boarding type, curriculum, facilities
+  (tag input), fee structure (dynamic rows)
+- **Photos**: up to 3, 2MB each, JPG/PNG/WEBP only — try exceeding either
+  limit and confirm the upload is rejected *before* any network request
+  fires, with a clear message
+- **Video**: up to 1, 10MB, MP4/MOV only — same validation pattern
+- Submit → status shows "pending" on the dashboard
+- Confirm an email arrives at every admin account's inbox notifying them of
+  the new submission, with a working link to the review page
 
-### One school per account
-- While still logged in as the same school_rep, try to find a way to
-  register a second school
-- **Expected:** there's no UI path to do this — "My school" always shows
-  your existing school's status/edit view once you have one registered.
-  (If testing the API directly: a second POST to `/api/schools/mine`
-  should return a 409 error.)
+### Editing a school
+- Any edit (regardless of current status — pending, approved, or rejected)
+  resets status to "pending" and requires re-review — this is intentional
+- Rejected schools show the admin's rejection reason on the dashboard
 
-### Edit a pending/approved/rejected submission
-- Click "Edit details" from the status view
-- Change something (e.g. add a facility) and resubmit
-- **Expected:** status resets to "pending" regardless of what it was
-  before — even editing an already-approved school sends it back for
-  re-review (this is intentional, not a bug)
-
-### View a rejection reason
-- (Needs an admin to reject the submission first — see Admin section)
-- Log back in as the school_rep after a rejection
-- **Expected:** status view shows "rejected" plus the admin's typed
-  reason, with an option to edit and resubmit
+### Approval / rejection notifications
+- Once an admin approves: confirm an email arrives at the rep's address
+  with a working link to the now-live public listing
+- Once an admin rejects: confirm an email arrives with the rejection reason
+  and a working link straight to the edit form
 
 ---
 
 ## Admin
 
-Admin accounts aren't self-service — see `README.md` for how to create one
-via `scripts/makeAdmin.ts`.
+Admin accounts are created via `scripts/makeAdmin.ts`, not self-service
+signup — see README for the process.
 
 ### Access control
-- Try visiting `/admin` while logged out — should redirect to `/login`
-- Try visiting `/admin` while logged in as a parent or school_rep —
-  should redirect to `/` (not show the dashboard, not error)
-- Log in as an actual admin — `/admin` should load normally, and an
-  "Admin" link should appear in the header nav
+- `/admin` and `/admin/schools/[id]` both redirect non-admins away (to
+  `/login` if logged out, to `/` if logged in as the wrong role)
 
-### Review pending submissions
-- Go to `/admin`, confirm the **Pending** tab is selected by default
-- Find a school submitted by a school_rep (see previous section)
-- Click **Approve**
-- **Expected:** school disappears from Pending tab, appears under
-  Approved tab, and now shows up in public search at `/schools`
+### Review workflow
+- `/admin` shows a simple list (name, district/region, ownership,
+  submitter) with a "Review" button per row — **no approve/reject buttons
+  directly in the list**
+- Clicking "Review" opens the full submission: description, photos, video,
+  facilities, complete fee table, contact info, and submitter details
+- Approve/Reject actions live at the bottom of *that* page, not the list —
+  confirm you can't approve/reject without first opening the review page
+- Rejecting requires a typed reason; submitting empty should block with an
+  inline error
+- For already-decided schools, confirm the "change my mind" secondary
+  action works (approve after a rejection, or vice versa)
+- Status tabs (Pending/Approved/Rejected/All) filter correctly
 
-### Reject a submission
-- Submit another test school as a school_rep (or reuse one)
-- In the admin dashboard, click **Reject**
-- Try submitting with an empty reason — should show a validation error
-  and not proceed
-- Type a reason, confirm rejection
-- **Expected:** moves to Rejected tab; logging in as that school_rep shows
-  the reason on their status view (see School Rep section above)
-
-### Status tabs and filtering
-- Click through Pending / Approved / Rejected / All tabs
-- **Expected:** each tab's list matches its label; "All" shows everything
-  regardless of status, sorted newest-first
+### Notifications
+- New submissions email **every** admin account, not just one hardcoded
+  address — worth testing with two admin accounts if you have them
+- Confirm the notification email actually lands in the real
+  `admin@myschoolapp-ug.com` inbox, not just Resend's dashboard logs
 
 ---
 
-## Cross-cutting things worth checking after any change
+## Cross-cutting checks (run after any auth/role/email change)
 
-These aren't single features but behaviors that touch multiple roles —
-worth a quick pass whenever you touch auth, roles, or the School model:
-
-- **Session persistence:** log in, refresh the page — should stay logged
-  in (not bounce to logged-out state)
-- **Role-based nav:** log in as each of the three roles in turn and
-  confirm the header shows only the links relevant to that role ("My
-  school" only for school_rep, "Admin" only for admin, "Saved schools"
-  only for parent)
-- **Logout:** works from any page, redirects to home, and immediately
-  reflects the logged-out header state (no stale "logged in" flash)
-- **Public data never leaks pending/rejected schools:** the two public
-  routes (`/api/schools` and `/api/schools/[slug]`) should always filter
-  to `status: "approved"` — worth double-checking after any edit to
-  either route file
+- Role-based nav in the header only shows links relevant to that role
+- Session persists across refresh; logout is immediate and complete
+- Public API routes (`/api/schools`, `/api/schools/[slug]`) never leak
+  pending/rejected schools regardless of who's asking
+- Every transactional email (activation, reset, password-changed, new
+  submission, approved, rejected) sends from `noreply@myschoolapp-ug.com`
+  and doesn't block the underlying action if sending fails (e.g. approving
+  a school should still succeed even if the notification email errors)
   
