@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { createHash } from "crypto";
 import bcrypt from "bcryptjs";
 import { connectDB } from "@/lib/db";
 import { User } from "@/models/User";
 import { PASSWORD_REGEX, PASSWORD_REQUIREMENTS_MESSAGE } from "@/lib/passwordValidation";
+import { hashToken } from "@/lib/tokens";
+import { sendPasswordChangedEmail } from "@/lib/email";
 
 const schema = z.object({
   token: z.string().min(1),
@@ -24,7 +25,7 @@ export async function POST(request: Request) {
 
   await connectDB();
 
-  const tokenHash = createHash("sha256").update(parsed.data.token).digest("hex");
+  const tokenHash = hashToken(parsed.data.token);
 
   const user = await User.findOne({
     resetPasswordTokenHash: tokenHash,
@@ -42,6 +43,12 @@ export async function POST(request: Request) {
   user.resetPasswordTokenHash = undefined;
   user.resetPasswordExpires = undefined;
   await user.save();
+
+  try {
+    await sendPasswordChangedEmail(user.email);
+  } catch (err) {
+    console.error("Failed to send password-changed notification:", err);
+  }
 
   return NextResponse.json({ message: "Password reset successfully." });
 }

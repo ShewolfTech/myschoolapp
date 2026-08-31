@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { randomBytes, createHash } from "crypto";
+import { generateToken } from "@/lib/tokens";
 import { connectDB } from "@/lib/db";
 import { User } from "@/models/User";
 import { sendPasswordResetEmail } from "@/lib/email";
@@ -30,8 +30,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ message: GENERIC_MESSAGE });
   }
 
-  const rawToken = randomBytes(32).toString("hex");
-  const tokenHash = createHash("sha256").update(rawToken).digest("hex");
+  const { rawToken, tokenHash } = generateToken();
 
   user.resetPasswordTokenHash = tokenHash;
   user.resetPasswordExpires = new Date(Date.now() + 60 * 60 * 1000); // 1 hour

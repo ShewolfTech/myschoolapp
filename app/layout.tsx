@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Zilla_Slab } from "next/font/google";
 import "./globals.css";
 import { ServiceWorkerRegister } from "./ServiceWorkerRegister";
+import { EmailVerificationBanner } from "./EmailVerificationBanner";
 import { SiteHeader } from "./SiteHeader";
 
 const zillaSlab = Zilla_Slab({
@@ -33,6 +34,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <SiteHeader />
+        <EmailVerificationBanner />
         {children}
         <ServiceWorkerRegister />
       </body>

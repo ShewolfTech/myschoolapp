@@ -17,13 +17,21 @@ export async function POST(
 
   await connectDB();
 
+  const user = await User.findById(session.user.id).select("emailVerified");
+  if (!user?.emailVerified) {
+    return NextResponse.json(
+      { error: "Please verify your email before saving schools." },
+      { status: 403 }
+    );
+  }
+
   const school = await School.findOne({ _id: schoolId, status: "approved" });
   if (!school) {
     return NextResponse.json({ error: "School not found" }, { status: 404 });
   }
 
   await User.findByIdAndUpdate(session.user.id, {
-    $addToSet: { favorites: schoolId }, // no-op if already favorited
+    $addToSet: { favorites: schoolId },
   });
 
   return NextResponse.json({ favorited: true });

@@ -42,7 +42,6 @@ async function assertOwnership(userId: string, schoolId: string) {
   return user?.managedSchools?.some((id: { toString(): string }) => id.toString() === schoolId) ?? false;
 }
 
-// GET: fetch one of the rep's own schools (for prefilling the edit form)
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -68,7 +67,6 @@ export async function GET(
   return NextResponse.json({ school });
 }
 
-// PATCH: edit one of the rep's own schools — resets status to "pending" for re-review
 export async function PATCH(
   request: Request,
   { params }: { params: Promise<{ id: string }> }

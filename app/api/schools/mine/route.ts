@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import slugify from "slugify";
 import { auth } from "@/lib/auth";
@@ -6,6 +6,7 @@ import { connectDB } from "@/lib/db";
 import { School, OWNERSHIP_TYPES, SCHOOL_LEVELS, BOARDING_TYPES, CURRICULUM_TYPES } from "@/models/School";
 import { User } from "@/models/User";
 import "@/models/District";
+import { sendNewSchoolNotificationToAdmins } from "@/lib/email";
 
 const feeItemSchema = z.object({
   level: z.string().trim().min(1),
@@ -44,7 +45,7 @@ async function getSessionUser() {
   return session.user;
 }
 
-// GET: list ALL schools this rep manages (a rep can now manage multiple)
+// GET: list ALL schools this rep manages
 export async function GET() {
   const sessionUser = await getSessionUser();
   if (!sessionUser) {
@@ -62,8 +63,8 @@ export async function GET() {
   return NextResponse.json({ schools: user?.managedSchools ?? [] });
 }
 
-// POST: register a new school — no limit on how many a rep can manage
-export async function POST(request: Request) {
+// POST: register a new school — requires a verified email
+export async function POST(request: NextRequest) {
   const sessionUser = await getSessionUser();
   if (!sessionUser) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -74,6 +75,13 @@ export async function POST(request: Request) {
   const user = await User.findById(sessionUser.id);
   if (!user) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
+  }
+
+  if (!user.emailVerified) {
+    return NextResponse.json(
+      { error: "Please verify your email before registering a school." },
+      { status: 403 }
+    );
   }
 
   const body = await request.json();
@@ -103,6 +111,18 @@ export async function POST(request: Request) {
 
   user.managedSchools.push(school._id);
   await user.save();
+
+  const admins = await User.find({ role: "admin" }).select("email");
+  const reviewUrl = `${request.nextUrl.origin}/admin/schools/${school._id}`;
+  try {
+    await sendNewSchoolNotificationToAdmins(
+      admins.map((a) => a.email),
+      school.name,
+      reviewUrl
+    );
+  } catch (err) {
+    console.error("Failed to notify admins of new school submission:", err);
+  }
 
   return NextResponse.json({ school }, { status: 201 });
 }

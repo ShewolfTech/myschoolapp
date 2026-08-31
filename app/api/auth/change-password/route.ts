@@ -5,6 +5,7 @@ import { auth } from "@/lib/auth";
 import { connectDB } from "@/lib/db";
 import { User } from "@/models/User";
 import { PASSWORD_REGEX, PASSWORD_REQUIREMENTS_MESSAGE } from "@/lib/passwordValidation";
+import { sendPasswordChangedEmail } from "@/lib/email";
 
 const schema = z.object({
   currentPassword: z.string().min(1, "Enter your current password"),
@@ -41,6 +42,12 @@ export async function POST(request: Request) {
 
   user.passwordHash = await bcrypt.hash(parsed.data.newPassword, 10);
   await user.save();
+
+  try {
+    await sendPasswordChangedEmail(user.email);
+  } catch (err) {
+    console.error("Failed to send password-changed notification:", err);
+  }
 
   return NextResponse.json({ message: "Password changed successfully." });
 }

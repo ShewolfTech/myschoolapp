@@ -1,8 +1,10 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { auth } from "@/lib/auth";
 import { connectDB } from "@/lib/db";
 import { School } from "@/models/School";
+import { User } from "@/models/User";
+import { sendSchoolApprovedEmail, sendSchoolRejectedEmail } from "@/lib/email";
 
 const decisionSchema = z.object({
   status: z.enum(["approved", "rejected"]),
@@ -10,7 +12,7 @@ const decisionSchema = z.object({
 });
 
 export async function PATCH(
-  request: Request,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const session = await auth();
@@ -50,6 +52,27 @@ export async function PATCH(
 
   if (!school) {
     return NextResponse.json({ error: "School not found" }, { status: 404 });
+  }
+
+  const rep = await User.findById(school.submittedBy).select("email");
+
+  try {
+    if (rep) {
+      if (parsed.data.status === "approved") {
+        const schoolUrl = `${request.nextUrl.origin}/schools/${school.slug}`;
+        await sendSchoolApprovedEmail(rep.email, school.name, schoolUrl);
+      } else {
+        const editUrl = `${request.nextUrl.origin}/register-school/${school._id.toString()}/edit`;
+        await sendSchoolRejectedEmail(
+          rep.email,
+          school.name,
+          parsed.data.rejectionReason ?? "",
+          editUrl
+        );
+      }
+    }
+  } catch (err) {
+    console.error("Failed to notify school rep of decision:", err);
   }
 
   return NextResponse.json({ school });
