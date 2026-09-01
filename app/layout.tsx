@@ -4,6 +4,7 @@ import "./globals.css";
 import { ServiceWorkerRegister } from "./ServiceWorkerRegister";
 import { EmailVerificationBanner } from "./EmailVerificationBanner";
 import { SiteHeader } from "./SiteHeader";
+import { Providers } from "./Providers";
 
 const zillaSlab = Zilla_Slab({
   variable: "--font-zilla-slab",
@@ -33,10 +34,12 @@ export default function RootLayout({
       className={`${zillaSlab.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <SiteHeader />
-        <EmailVerificationBanner />
-        {children}
-        <ServiceWorkerRegister />
+        <Providers>
+          <SiteHeader />
+          <EmailVerificationBanner />
+          {children}
+          <ServiceWorkerRegister />
+        </Providers>
       </body>
     </html>
   );
