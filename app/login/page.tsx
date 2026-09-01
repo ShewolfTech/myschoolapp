@@ -5,6 +5,7 @@ import { signIn, getSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { PasswordInput } from "../PasswordInput";
+import { GoogleSignInButton } from "../GoogleSignInButton";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -87,6 +88,14 @@ export default function LoginPage() {
             {loading ? "Logging in..." : "Log in"}
           </button>
         </form>
+
+        <div className="flex items-center gap-3 my-6">
+          <div className="flex-1 border-t border-ink-soft/30" />
+          <span className="text-xs text-ink-soft/70 font-ledger">OR</span>
+          <div className="flex-1 border-t border-ink-soft/30" />
+        </div>
+
+        <GoogleSignInButton />
 
         <p className="text-sm text-ink-soft mt-6 text-center">
           Don&apos;t have an account?{" "}

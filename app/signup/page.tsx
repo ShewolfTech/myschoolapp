@@ -7,6 +7,7 @@ import Link from "next/link";
 import { PasswordInput } from "../PasswordInput";
 import { PasswordRequirements } from "../PasswordRequirements";
 import { isPasswordStrong, PASSWORD_REQUIREMENTS_MESSAGE } from "@/lib/passwordValidation";
+import { GoogleSignInButton } from "../GoogleSignInButton";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -158,6 +159,17 @@ export default function SignupPage() {
             {loading ? "Creating account..." : "Create account"}
           </button>
         </form>
+
+        <div className="flex items-center gap-3 my-6">
+          <div className="flex-1 border-t border-ink-soft/30" />
+          <span className="text-xs text-ink-soft/70 font-ledger">OR</span>
+          <div className="flex-1 border-t border-ink-soft/30" />
+        </div>
+
+        <GoogleSignInButton />
+        <p className="text-xs text-ink-soft/70 text-center mt-2">
+          We&apos;ll ask whether you&apos;re a parent or a school rep right after.
+        </p>
 
         <p className="text-sm text-ink-soft mt-6 text-center">
           Already have an account?{" "}
