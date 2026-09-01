@@ -68,26 +68,35 @@ export default function SignupPage() {
           Create an account
         </h1>
 
+
+        <GoogleSignInButton />
+        <p className="text-xs text-ink-soft/70 text-center mt-2">
+          We&apos;ll ask whether you&apos;re a parent or a school rep right after.
+        </p>
+        <div className="flex items-center gap-3 my-6">
+          <div className="flex-1 border-t border-ink-soft/30" />
+          <span className="text-xs text-ink-soft/70 font-ledger">OR</span>
+          <div className="flex-1 border-t border-ink-soft/30" />
+        </div>
+
         <div className="flex gap-2 mb-6">
           <button
             type="button"
             onClick={() => setRole("parent")}
-            className={`flex-1 text-sm font-ledger rounded-sm py-2 border transition-colors ${
-              role === "parent"
+            className={`flex-1 text-sm font-ledger rounded-sm py-2 border transition-colors ${role === "parent"
                 ? "bg-chalkboard text-paper-white border-chalkboard"
                 : "bg-transparent text-ink-soft border-ink-soft/40"
-            }`}
+              }`}
           >
             I&apos;m a parent
           </button>
           <button
             type="button"
             onClick={() => setRole("school_rep")}
-            className={`flex-1 text-sm font-ledger rounded-sm py-2 border transition-colors ${
-              role === "school_rep"
+            className={`flex-1 text-sm font-ledger rounded-sm py-2 border transition-colors ${role === "school_rep"
                 ? "bg-chalkboard text-paper-white border-chalkboard"
                 : "bg-transparent text-ink-soft border-ink-soft/40"
-            }`}
+              }`}
           >
             I represent a school
           </button>
@@ -159,17 +168,6 @@ export default function SignupPage() {
             {loading ? "Creating account..." : "Create account"}
           </button>
         </form>
-
-        <div className="flex items-center gap-3 my-6">
-          <div className="flex-1 border-t border-ink-soft/30" />
-          <span className="text-xs text-ink-soft/70 font-ledger">OR</span>
-          <div className="flex-1 border-t border-ink-soft/30" />
-        </div>
-
-        <GoogleSignInButton />
-        <p className="text-xs text-ink-soft/70 text-center mt-2">
-          We&apos;ll ask whether you&apos;re a parent or a school rep right after.
-        </p>
 
         <p className="text-sm text-ink-soft mt-6 text-center">
           Already have an account?{" "}
