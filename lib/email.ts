@@ -2,7 +2,7 @@ import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const FROM = process.env.EMAIL_FROM || "onboarding@resend.dev";
-const APP_NAME = "School Directory Uganda";
+const APP_NAME = "My School App";
 
 function shell(title: string, bodyHtml: string): string {
   return `

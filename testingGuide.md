@@ -1,4 +1,4 @@
-# School Directory Uganda — Testing Guide
+# My School App — Testing Guide
 
 Thanks for taking the time to try this out. This is an early working version —
 the goal right now is to test the **core flow**: parents finding schools,

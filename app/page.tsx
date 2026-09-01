@@ -26,7 +26,7 @@ export default async function HomePage() {
             Every school your child could go to, not just the ones you&apos;ve heard of.
           </h1>
           <p className="text-ink-soft text-lg mb-8 max-w-xl">
-            School Directory Uganda lets you search government and private
+            My School App lets you search government and private
             schools by region, district, level, and fees &mdash; so you&apos;re
             not limited to only the schools you already know about. Create a
             free account to start browsing.

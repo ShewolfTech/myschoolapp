@@ -12,7 +12,7 @@ export async function SiteHeader() {
           {/*
             LOGO PLACEHOLDER
             Once you have a real logo file, replace this div with:
-            <Image src="/logo.png" alt="School Directory Uganda" width={36} height={36} />
+            <Image src="/logo.png" alt="My School App" width={36} height={36} />
             (import Image from "next/image" at the top of this file)
             Drop the logo file at: public/logo.png
           */}
@@ -22,7 +22,7 @@ export async function SiteHeader() {
             </span>
           </div>
           <span className="font-display text-xl font-semibold">
-            School Directory Uganda
+            My School App
           </span>
         </Link>
         <nav className="flex items-center gap-6 text-sm font-ledger">
