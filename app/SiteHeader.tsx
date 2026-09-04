@@ -6,7 +6,7 @@ export async function SiteHeader() {
   const session = await auth();
 
   return (
-    <header className="bg-chalkboard text-paper-white">
+    <header className="bg-chalkboard text-paper-white sticky top-0 z-50">
       <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3">
           {/* eslint-disable-next-line @next/next/no-img-element */}
