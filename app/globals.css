@@ -1,16 +1,27 @@
 @import "tailwindcss";
 
 :root {
-  --paper: #e9e1cb;
-  --paper-dark: #ddd2b3;
-  --ink: #2a2723;
-  --ink-soft: #55504a;
-  --chalkboard: #1f4a3d;
-  --chalkboard-dark: #163a30;
-  --margin-red: #a63a2e;
-  --ruled-blue: #3c5872;
-  --stamp-gold: #c89b3c;
-  --paper-white: #f6f2e6;
+  /* Brand palette */
+  --navy: #10243A;
+  --navy-dark: #0b1929;
+  --maroon: #8B1E2D;
+  --maroon-dark: #6b1620;
+  --grey: #5F6063;
+  --soft-white: #F8F7F4;
+
+  /* Semantic tokens — component files reference these names, not raw hex,
+     so most of the app re-themes from this file alone. Layout: navy page
+     background with maroon header/footer "chrome", light content cards. */
+  --paper: var(--navy);          /* page background */
+  --paper-dark: #e8e8e9;          /* chip/secondary bg, sits inside white cards */
+  --paper-white: var(--soft-white); /* card panel background */
+  --ink: var(--navy);             /* text INSIDE white cards — most of the app's text */
+  --ink-soft: var(--grey);        /* muted text INSIDE white cards */
+  --chalkboard: var(--maroon);    /* header, footer, primary buttons */
+  --chalkboard-dark: var(--maroon-dark);
+  --margin-red: var(--maroon);    /* accent/danger — same hue as chalkboard by design */
+  --ruled-blue: var(--grey);
+  --stamp-gold: var(--grey);
 }
 
 @theme inline {
@@ -24,14 +35,12 @@
   --color-margin-red: var(--margin-red);
   --color-ruled-blue: var(--ruled-blue);
   --color-stamp-gold: var(--stamp-gold);
-  --font-display: var(--font-zilla-slab);
+  --font-display: var(--font-poppins);
 }
 
 body {
   background: var(--paper);
   color: var(--ink);
-  /* System font stack for body text: no extra font request, which matters
-     on the mobile data budgets most parents using this app will have. */
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
@@ -49,3 +58,13 @@ body {
   font-family: var(--font-display);
 }
 
+/* Text sitting directly on the navy page background (outside any white
+   card) needs to be light, not the default --ink (which is tuned for text
+   on white cards). Use this utility for page headings/intros that aren't
+   wrapped in a bg-paper-white panel. */
+.text-on-navy {
+  color: var(--soft-white);
+}
+.text-on-navy-soft {
+  color: color-mix(in srgb, var(--soft-white) 70%, var(--grey));
+}

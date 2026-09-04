@@ -72,7 +72,7 @@ export function AdminReviewActions({
           <button
             onClick={approve}
             disabled={loading}
-            className="bg-chalkboard text-paper-white font-ledger text-sm rounded-sm px-5 py-3 hover:bg-chalkboard-dark transition-colors disabled:opacity-60"
+            className="bg-ink text-paper-white font-ledger text-sm rounded-sm px-5 py-3 hover:brightness-125 transition-all disabled:opacity-60"
           >
             {loading ? "Approving..." : "Approve instead"}
           </button>
@@ -117,7 +117,7 @@ export function AdminReviewActions({
         <button
           onClick={approve}
           disabled={loading}
-          className="bg-chalkboard text-paper-white font-ledger text-sm rounded-sm px-5 py-3 hover:bg-chalkboard-dark transition-colors disabled:opacity-60"
+          className="bg-ink text-paper-white font-ledger text-sm rounded-sm px-5 py-3 hover:brightness-125 transition-all disabled:opacity-60"
         >
           {loading ? "Approving..." : "Approve"}
         </button>

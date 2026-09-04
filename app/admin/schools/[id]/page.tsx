@@ -9,7 +9,7 @@ import { formatUGX, groupFeesByTerm } from "@/lib/feeDisplay";
 import { AdminReviewActions } from "./AdminReviewActions";
 
 const STATUS_STYLES: Record<string, string> = {
-  approved: "bg-chalkboard text-paper-white",
+  approved: "bg-ink text-paper-white",
   pending: "bg-stamp-gold text-ink",
   rejected: "bg-margin-red text-paper-white",
 };
@@ -38,7 +38,7 @@ export default async function AdminSchoolReviewPage({
 
   return (
     <main className="flex-1 max-w-3xl w-full mx-auto px-6 py-10">
-      <Link href="/admin" className="text-sm text-chalkboard hover:text-margin-red font-ledger">
+      <Link href="/admin" className="text-sm text-on-navy hover:text-paper-white/70 font-ledger">
         ← Back to all submissions
       </Link>
 
@@ -48,8 +48,9 @@ export default async function AdminSchoolReviewPage({
             {districtName}, {school.region} Region
           </span>
           <span
-            className={`font-ledger text-xs uppercase px-3 py-1 rounded-sm ${STATUS_STYLES[school.status] ?? "bg-paper-dark text-ink"
-              }`}
+            className={`font-ledger text-xs uppercase px-3 py-1 rounded-sm ${
+              STATUS_STYLES[school.status] ?? "bg-paper-dark text-ink"
+            }`}
           >
             {school.status}
           </span>

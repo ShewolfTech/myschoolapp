@@ -2,7 +2,6 @@ import Link from "next/link";
 import { requireRole } from "@/lib/authHelpers";
 import { connectDB } from "@/lib/db";
 import { User } from "@/models/User";
-import "@/models/School";
 import "@/models/District";
 
 interface ManagedSchool {
@@ -16,7 +15,7 @@ interface ManagedSchool {
 }
 
 const STATUS_STYLES: Record<string, string> = {
-  approved: "bg-chalkboard text-paper-white",
+  approved: "bg-ink text-paper-white",
   pending: "bg-stamp-gold text-ink",
   rejected: "bg-margin-red text-paper-white",
 };
@@ -38,12 +37,12 @@ export default async function RegisterSchoolDashboard() {
   return (
     <main className="flex-1 max-w-3xl w-full mx-auto px-6 py-10">
       <div className="flex items-center justify-between mb-8">
-        <h1 className="font-display text-3xl font-semibold text-chalkboard">
+        <h1 className="font-display text-3xl font-semibold text-on-navy">
           My schools
         </h1>
         <Link
           href="/register-school/new"
-          className="bg-chalkboard text-paper-white font-ledger text-sm rounded-sm px-5 py-3 hover:bg-chalkboard-dark transition-colors"
+          className="bg-chalkboard text-paper-white font-ledger text-sm rounded-sm px-5 py-3 hover:brightness-110 transition-all"
         >
           + Register a school
         </Link>
@@ -59,7 +58,7 @@ export default async function RegisterSchoolDashboard() {
           </p>
           <Link
             href="/register-school/new"
-            className="inline-block bg-chalkboard text-paper-white font-ledger text-sm rounded-sm px-5 py-3 hover:bg-chalkboard-dark transition-colors"
+            className="inline-block bg-chalkboard text-paper-white font-ledger text-sm rounded-sm px-5 py-3 hover:brightness-110 transition-all"
           >
             + Register a school
           </Link>

@@ -50,22 +50,24 @@ function SchoolsBrowserInner() {
 
   return (
     <main className="flex-1 max-w-5xl w-full mx-auto px-6 py-10">
-      <h1 className="font-display text-3xl font-semibold text-chalkboard mb-1">
+      <h1 className="font-display text-3xl font-semibold text-on-navy mb-1">
         Find a school
       </h1>
-      <p className="text-ink-soft mb-8">
+      <p className="text-on-navy-soft mb-6">
         {schools.length} approved school{schools.length === 1 ? "" : "s"} listed so far
       </p>
 
-      <SchoolFilters filters={filters} onChange={setFilters} />
-      <SchoolResults schools={schools} loading={loading} />
+      <div className="bg-paper-white border border-ink-soft/30 rounded-sm p-6 sm:p-8">
+        <SchoolFilters filters={filters} onChange={setFilters} />
+        <SchoolResults schools={schools} loading={loading} />
+      </div>
     </main>
   );
 }
 
 export function SchoolsBrowser() {
   return (
-    <Suspense fallback={<div className="flex-1 px-6 py-10">Loading&hellip;</div>}>
+    <Suspense fallback={<div className="flex-1 px-6 py-10 text-on-navy">Loading&hellip;</div>}>
       <SchoolsBrowserInner />
     </Suspense>
   );

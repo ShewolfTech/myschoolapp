@@ -13,7 +13,7 @@ export interface SchoolListItem {
 }
 
 const OWNERSHIP_COLORS: Record<string, string> = {
-  Government: "bg-ruled-blue",
+  Government: "bg-ink",
   Private: "bg-margin-red",
   "Government-Aided": "bg-stamp-gold",
 };

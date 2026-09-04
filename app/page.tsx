@@ -19,14 +19,14 @@ export default async function HomePage() {
     <main className="flex-1 flex flex-col">
       <section className="flex-1 flex flex-col lg:flex-row items-center gap-12 px-6 py-16 max-w-5xl mx-auto w-full">
         <div className="flex-1">
-          <span className="font-ledger text-sm tracking-widest uppercase text-ruled-blue mb-4 block">
+          <span className="font-ledger text-sm tracking-widest uppercase text-on-navy-soft mb-4 block">
             Uganda &middot; all 4 regions
           </span>
-          <h1 className="font-display text-4xl sm:text-5xl font-semibold text-chalkboard leading-tight mb-6">
+          <h1 className="font-display text-4xl sm:text-5xl font-semibold text-on-navy leading-tight mb-6">
             Every school your child could go to, not just the ones you&apos;ve heard of.
           </h1>
-          <p className="text-ink-soft text-lg mb-8 max-w-xl">
-            My School App lets you search government and private
+          <p className="text-on-navy-soft text-lg mb-8 max-w-xl">
+            MySchoolApp Uganda lets you search government and private
             schools by region, district, level, and fees &mdash; so you&apos;re
             not limited to only the schools you already know about. Create a
             free account to start browsing.
@@ -34,13 +34,13 @@ export default async function HomePage() {
           <div className="flex flex-wrap gap-4">
             <Link
               href="/signup"
-              className="inline-flex items-center justify-center rounded-sm bg-chalkboard px-8 py-4 font-display text-lg font-semibold text-paper-white hover:bg-chalkboard-dark transition-colors"
+              className="inline-flex items-center justify-center rounded-sm bg-chalkboard px-8 py-4 font-display text-lg font-semibold text-paper-white hover:brightness-110 transition-all"
             >
               Create free account
             </Link>
             <Link
               href="/login"
-              className="inline-flex items-center justify-center rounded-sm border-2 border-chalkboard px-8 py-4 font-display text-lg font-semibold text-chalkboard hover:bg-paper-dark transition-colors"
+              className="inline-flex items-center justify-center rounded-sm border-2 border-paper-white text-on-navy px-8 py-4 font-display text-lg font-semibold hover:bg-paper-white/10 transition-colors"
             >
               Log in
             </Link>
@@ -60,41 +60,38 @@ export default async function HomePage() {
               className="rounded-sm w-full h-auto object-cover" />
             Drop the file at: public/images/hero.jpg
           */}
-          <div className="aspect-[4/3] w-full rounded-sm border-2 border-dashed border-ink-soft/40 bg-paper-dark flex flex-col items-center justify-center gap-2 text-center px-6">
-            <span className="font-display text-lg text-ink-soft">Photo placeholder</span>
-            <span className="text-sm text-ink-soft/70 max-w-xs">
-              Add a licensed photo here (e.g. a Ugandan classroom or students)
-              &mdash; see the comment in this file for details.
-            </span>
+          <div className="aspect-[4/3] w-full rounded-sm border-2 border-dashed bg-chalkboard flex flex-col items-center justify-center gap-2 text-center px-6">
+            <img src="logo.jpg" alt="..." width={600} height={450}
+              className="rounded-sm w-full h-auto object-cover" />
           </div>
         </div>
       </section>
 
-      <section className="border-t border-dashed border-ink-soft/40 px-6 py-12">
+      <section className="border-t border-dashed border-paper-white/20 px-6 py-12">
         <div className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
           <div>
-            <p className="font-display text-xl font-semibold text-chalkboard mb-2">
+            <p className="font-display text-xl font-semibold text-on-navy mb-2">
               Search every region
             </p>
-            <p className="text-ink-soft text-sm">
+            <p className="text-on-navy-soft text-sm">
               Central, Eastern, Northern, and Western Uganda &mdash; not just
               the schools near you.
             </p>
           </div>
           <div>
-            <p className="font-display text-xl font-semibold text-chalkboard mb-2">
+            <p className="font-display text-xl font-semibold text-on-navy mb-2">
               See real fees upfront
             </p>
-            <p className="text-ink-soft text-sm">
+            <p className="text-on-navy-soft text-sm">
               Fee structures by level and term, so there are no surprises
               before you reach out.
             </p>
           </div>
           <div>
-            <p className="font-display text-xl font-semibold text-chalkboard mb-2">
+            <p className="font-display text-xl font-semibold text-on-navy mb-2">
               Verified listings
             </p>
-            <p className="text-ink-soft text-sm">
+            <p className="text-on-navy-soft text-sm">
               Every school is reviewed before it appears in search results.
             </p>
           </div>

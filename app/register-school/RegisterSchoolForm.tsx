@@ -440,7 +440,7 @@ export function RegisterSchoolForm({
           <button
             type="button"
             onClick={addFacility}
-            className="bg-paper-dark text-ink font-ledger text-sm rounded-sm px-4 py-2 hover:brightness-95"
+            className="bg-chalkboard text-paper-white font-ledger text-sm rounded-sm px-4 py-2 hover:brightness-95"
           >
             Add
           </button>
@@ -514,7 +514,7 @@ export function RegisterSchoolForm({
           <button
             type="button"
             onClick={addFeeRow}
-            className="bg-paper-dark text-ink font-ledger text-xs rounded-sm px-3 py-1.5 hover:brightness-95"
+            className="bg-chalkboard text-paper-white font-ledger text-xs rounded-sm px-3 py-1.5 hover:brightness-95"
           >
             + Add fee item
           </button>

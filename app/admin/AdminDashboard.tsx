@@ -19,7 +19,7 @@ interface AdminSchool {
 }
 
 const STATUS_STYLES: Record<string, string> = {
-  approved: "bg-chalkboard text-paper-white",
+  approved: "bg-ink text-paper-white",
   pending: "bg-stamp-gold text-ink",
   rejected: "bg-margin-red text-paper-white",
 };
@@ -62,9 +62,9 @@ export function AdminDashboard() {
       </div>
 
       {loading ? (
-        <p className="text-ink-soft font-ledger text-sm">Loading&hellip;</p>
+        <p className="text-on-navy-soft font-ledger text-sm">Loading&hellip;</p>
       ) : schools.length === 0 ? (
-        <p className="text-ink-soft">No schools in this category.</p>
+        <p className="text-on-navy-soft">No schools in this category.</p>
       ) : (
         <ul className="space-y-4">
           {schools.map((school) => (

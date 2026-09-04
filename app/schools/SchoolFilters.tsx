@@ -34,7 +34,6 @@ export function SchoolFilters({
   const [districts, setDistricts] = useState<District[]>([]);
   const [searchInput, setSearchInput] = useState(filters.search);
 
-  // Fetch districts whenever region changes (cascading filter)
   useEffect(() => {
     const url =
       filters.region && filters.region !== "All"
@@ -47,7 +46,6 @@ export function SchoolFilters({
       .catch(() => setDistricts([]));
   }, [filters.region]);
 
-  // Debounce free-text search so we're not firing a request on every keystroke
   useEffect(() => {
     const timeout = setTimeout(() => {
       if (searchInput !== filters.search) {
@@ -60,7 +58,6 @@ export function SchoolFilters({
 
   return (
     <div className="border-b border-dashed border-ink-soft/40 pb-6 mb-6">
-      {/* Region tabs, styled like ledger section dividers */}
       <div className="flex flex-wrap gap-1 mb-5">
         {REGIONS.map((region) => {
           const active = filters.region === region || (region === "All" && !filters.region);
@@ -88,13 +85,13 @@ export function SchoolFilters({
           placeholder="Search by school name..."
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
-          className="col-span-1 sm:col-span-2 lg:col-span-2 bg-paper-white border border-ink-soft/40 rounded-sm px-3 py-2 text-sm placeholder:text-ink-soft/60 focus:outline-none focus:ring-2 focus:ring-chalkboard"
+          className="col-span-1 sm:col-span-2 lg:col-span-2 bg-white border border-ink-soft/40 rounded-sm px-3 py-2 text-sm placeholder:text-ink-soft/60 focus:outline-none focus:ring-2 focus:ring-chalkboard"
         />
 
         <select
           value={filters.district}
           onChange={(e) => onChange({ ...filters, district: e.target.value })}
-          className="bg-paper-white border border-ink-soft/40 rounded-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-chalkboard"
+          className="bg-white border border-ink-soft/40 rounded-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-chalkboard"
         >
           <option value="">All districts</option>
           {districts.map((d) => (
@@ -107,7 +104,7 @@ export function SchoolFilters({
         <select
           value={filters.ownershipType}
           onChange={(e) => onChange({ ...filters, ownershipType: e.target.value })}
-          className="bg-paper-white border border-ink-soft/40 rounded-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-chalkboard"
+          className="bg-white border border-ink-soft/40 rounded-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-chalkboard"
         >
           {OWNERSHIP_TYPES.map((o) => (
             <option key={o} value={o === "All" ? "" : o}>
@@ -119,7 +116,7 @@ export function SchoolFilters({
         <select
           value={filters.level}
           onChange={(e) => onChange({ ...filters, level: e.target.value })}
-          className="bg-paper-white border border-ink-soft/40 rounded-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-chalkboard"
+          className="bg-white border border-ink-soft/40 rounded-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-chalkboard"
         >
           {LEVELS.map((l) => (
             <option key={l} value={l === "All" ? "" : l}>
@@ -129,11 +126,11 @@ export function SchoolFilters({
         </select>
       </div>
 
-            <div className="mt-3 flex flex-col sm:flex-row gap-3">
+      <div className="mt-3 flex flex-col sm:flex-row gap-3">
         <select
           value={filters.boardingType}
           onChange={(e) => onChange({ ...filters, boardingType: e.target.value })}
-          className="bg-paper-white border border-ink-soft/40 rounded-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-chalkboard"
+          className="bg-white border border-ink-soft/40 rounded-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-chalkboard"
         >
           {BOARDING_TYPES.map((b) => (
             <option key={b} value={b === "All" ? "" : b}>
@@ -145,7 +142,7 @@ export function SchoolFilters({
         <select
           value={filters.curriculum}
           onChange={(e) => onChange({ ...filters, curriculum: e.target.value })}
-          className="bg-paper-white border border-ink-soft/40 rounded-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-chalkboard"
+          className="bg-white border border-ink-soft/40 rounded-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-chalkboard"
         >
           {CURRICULUM_TYPES.map((c) => (
             <option key={c} value={c === "All" ? "" : c}>

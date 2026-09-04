@@ -1,26 +1,27 @@
 import type { Metadata, Viewport } from "next";
-import { Zilla_Slab } from "next/font/google";
+import { Poppins } from "next/font/google";
 import "./globals.css";
 import { ServiceWorkerRegister } from "./ServiceWorkerRegister";
-import { EmailVerificationBanner } from "./EmailVerificationBanner";
 import { SiteHeader } from "./SiteHeader";
+import { SiteFooter } from "./SiteFooter";
 import { Providers } from "./Providers";
+import { EmailVerificationBanner } from "./EmailVerificationBanner";
 
-const zillaSlab = Zilla_Slab({
-  variable: "--font-zilla-slab",
+const poppins = Poppins({
+  variable: "--font-poppins",
   subsets: ["latin"],
   weight: ["500", "600", "700"],
 });
 
 export const metadata: Metadata = {
-  title: "My School App Uganda | Find schools in every region",
+  title: "MySchoolApp Uganda | Find schools in every region",
   description:
     "Search and compare government and private schools across all regions and districts of Uganda — see fees, contacts, and details in one place.",
   manifest: "/manifest.json",
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0f766e",
+  themeColor: "#8B1E2D",
 };
 
 export default function RootLayout({
@@ -29,15 +30,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${zillaSlab.variable} h-full antialiased`}
-    >
+    <html lang="en" className={`${poppins.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         <Providers>
           <SiteHeader />
           <EmailVerificationBanner />
           {children}
+          <SiteFooter />
           <ServiceWorkerRegister />
         </Providers>
       </body>

@@ -9,20 +9,14 @@ export async function SiteHeader() {
     <header className="bg-chalkboard text-paper-white">
       <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3">
-          {/*
-            LOGO PLACEHOLDER
-            Once you have a real logo file, replace this div with:
-            <Image src="/logo.png" alt="My School App" width={36} height={36} />
-            (import Image from "next/image" at the top of this file)
-            Drop the logo file at: public/logo.png
-          */}
-          <div className="w-9 h-9 shrink-0 rounded-sm border-2 border-dashed border-paper-white/50 flex items-center justify-center">
-            <span className="font-ledger text-[9px] uppercase tracking-wide text-paper-white/60">
-              Logo
-            </span>
-          </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/icon.png"
+            alt="MySchoolApp Uganda"
+            className="w-9 h-9 shrink-0 object-contain"
+          />
           <span className="font-display text-xl font-semibold">
-            My School App
+            MySchoolApp
           </span>
         </Link>
         <nav className="flex items-center gap-6 text-sm font-ledger">
@@ -63,7 +57,7 @@ export async function SiteHeader() {
               </Link>
               <Link
                 href="/signup"
-                className="bg-stamp-gold text-ink px-3 py-1.5 rounded-sm hover:brightness-95 transition-all"
+                className="bg-paper-white text-chalkboard px-3 py-1.5 rounded-sm hover:brightness-95 transition-all font-semibold"
               >
                 Sign up
               </Link>
