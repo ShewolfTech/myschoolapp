@@ -31,7 +31,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           "+passwordHash"
         );
 
-        // No account, or an OAuth-only account with no local password set
         if (!user || !user.passwordHash) {
           return null;
         }
@@ -45,6 +44,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           id: user._id.toString(),
           name: user.name,
           email: user.email,
+          image: user.image,
           role: user.role,
         };
       },
@@ -56,8 +56,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
   callbacks: {
     async signIn({ user, account }) {
-      // Credentials sign-ins already resolved to a real DB user in
-      // authorize() above — nothing more to do here.
       if (account?.provider !== "google") {
         return true;
       }
@@ -71,10 +69,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       let dbUser = await User.findOne({ email: user.email.toLowerCase() });
 
       if (!dbUser) {
-        // First time signing in with this Google account — create a User
-        // with role "pending". Google has already verified this email
-        // address, so we can mark it verified immediately and skip our
-        // own activation-email flow for this account.
         dbUser = await User.create({
           name: user.name || user.email.split("@")[0],
           email: user.email.toLowerCase(),
@@ -84,9 +78,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         });
       }
 
-      // Attach the real Mongo id/role onto the object NextAuth passes
-      // forward, so the jwt() callback below can read them.
       user.id = dbUser._id.toString();
+      user.name = dbUser.name;
+      user.image = dbUser.image ?? null;
       (user as { role?: string }).role = dbUser.role;
 
       return true;
@@ -95,13 +89,20 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (user) {
         token.id = user.id;
         token.role = (user as { role?: string }).role;
+        token.name = user.name;
+        token.picture = user.image;
       }
 
-      // Fired when the client calls useSession().update({ role: ... }) —
-      // used right after someone picks their role on /complete-profile,
-      // so the JWT reflects it without requiring a full re-login.
-      if (trigger === "update" && session?.role) {
-        token.role = session.role as string;
+      // Fired when the client calls useSession().update({...}) — used
+      // after picking a role on /complete-profile, and now also after
+      // editing name/photo on the profile page — so the JWT reflects
+      // changes without requiring a full re-login.
+      if (trigger === "update" && session) {
+        if (session.role) token.role = session.role as string;
+        if (typeof session.name === "string") token.name = session.name;
+        if (typeof session.image === "string" || session.image === null) {
+          token.picture = session.image;
+        }
       }
 
       return token;
@@ -110,6 +111,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (session.user) {
         session.user.id = token.id as string;
         session.user.role = token.role as string;
+        session.user.name = (token.name as string) ?? session.user.name;
+        session.user.image = (token.picture as string) ?? null;
       }
       return session;
     },
