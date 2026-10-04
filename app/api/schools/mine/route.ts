@@ -6,7 +6,6 @@ import { connectDB } from "@/lib/db";
 import { School, OWNERSHIP_TYPES, SCHOOL_LEVELS, BOARDING_TYPES, CURRICULUM_TYPES } from "@/models/School";
 import { User } from "@/models/User";
 import "@/models/District";
-import { sendNewSchoolNotificationToAdmins } from "@/lib/email";
 
 const feeItemSchema = z.object({
   level: z.string().trim().min(1),
@@ -46,7 +45,6 @@ async function getSessionUser() {
   return session.user;
 }
 
-// GET: list ALL schools this rep manages
 export async function GET() {
   const sessionUser = await getSessionUser();
   if (!sessionUser) {
@@ -64,7 +62,8 @@ export async function GET() {
   return NextResponse.json({ schools: user?.managedSchools ?? [] });
 }
 
-// POST: register a new school — requires a verified email
+// POST: create a new school as "awaiting_payment" — it only enters the
+// admin review queue once the listing fee is paid (see lib/payments.ts).
 export async function POST(request: NextRequest) {
   const sessionUser = await getSessionUser();
   if (!sessionUser) {
@@ -106,24 +105,15 @@ export async function POST(request: NextRequest) {
     ...data,
     contact: { ...data.contact, email: data.contact.email || undefined },
     slug,
-    status: "pending",
+    status: "awaiting_payment",
     submittedBy: user._id,
   });
 
   user.managedSchools.push(school._id);
   await user.save();
 
-  const admins = await User.find({ role: "admin" }).select("email");
-  const reviewUrl = `${request.nextUrl.origin}/admin/schools/${school._id}`;
-  try {
-    await sendNewSchoolNotificationToAdmins(
-      admins.map((a) => a.email),
-      school.name,
-      reviewUrl
-    );
-  } catch (err) {
-    console.error("Failed to notify admins of new school submission:", err);
-  }
+  // No admin notification here — that happens once the listing fee is
+  // paid and the school moves to "pending" (lib/payments.ts).
 
   return NextResponse.json({ school }, { status: 201 });
 }

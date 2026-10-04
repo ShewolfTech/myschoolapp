@@ -239,7 +239,7 @@ export function RegisterSchoolForm({
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
-    const data = await res.json();
+    const data = await res.json().catch(() => ({}));
 
     setSubmitting(false);
 
@@ -248,7 +248,11 @@ export function RegisterSchoolForm({
       return;
     }
 
-    router.push("/register-school");
+    if (mode === "create") {
+      router.push(`/register-school/${data.school._id}/pay`);
+    } else {
+      router.push("/register-school");
+    }
     router.refresh();
   }
 
@@ -349,11 +353,10 @@ export function RegisterSchoolForm({
               key={level}
               type="button"
               onClick={() => toggleLevel(level)}
-              className={`text-sm font-ledger rounded-sm px-4 py-2 border transition-colors ${
-                form.levels.includes(level)
+              className={`text-sm font-ledger rounded-sm px-4 py-2 border transition-colors ${form.levels.includes(level)
                   ? "bg-chalkboard text-paper-white border-chalkboard"
                   : "bg-transparent text-ink-soft border-ink-soft/40"
-              }`}
+                }`}
             >
               {level}
             </button>

@@ -43,6 +43,7 @@ async function assertOwnership(userId: string, schoolId: string) {
   return user?.managedSchools?.some((id: { toString(): string }) => id.toString() === schoolId) ?? false;
 }
 
+// GET: fetch one of the rep's own schools (for prefilling the edit form)
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -68,6 +69,13 @@ export async function GET(
   return NextResponse.json({ school });
 }
 
+// PATCH: edit one of the rep's own schools.
+// Editing a school that's already past the payment gate (pending/approved/
+// rejected) resets it to "pending" for re-review, same as before payments
+// existed. But editing a school still sitting in "awaiting_payment" must
+// NOT flip it to "pending" — that would let someone skip paying just by
+// saving the form again. So: fetch the current status first, and only
+// reset to "pending" if it wasn't "awaiting_payment" to begin with.
 export async function PATCH(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -96,14 +104,21 @@ export async function PATCH(
 
   const data = parsed.data;
 
+  const existing = await School.findById(id).select("status");
+  if (!existing) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+
+  const nextStatus = existing.status === "awaiting_payment" ? "awaiting_payment" : "pending";
+
   const school = await School.findByIdAndUpdate(
     id,
     {
       ...data,
       contact: { ...data.contact, email: data.contact.email || undefined },
-      status: "pending",
+      status: nextStatus,
       rejectionReason: undefined,
-      verifiedAt: undefined,
+      verifiedAt: nextStatus === "pending" ? undefined : existing.get("verifiedAt"),
     },
     { new: true }
   );

@@ -18,7 +18,7 @@ export const CURRICULUM_TYPES = [
 ] as const;
 export type CurriculumType = (typeof CURRICULUM_TYPES)[number];
 
-export const SCHOOL_STATUS = ["pending", "approved", "rejected"] as const;
+export const SCHOOL_STATUS = ["awaiting_payment", "pending", "approved", "rejected"] as const;
 export type SchoolStatus = (typeof SCHOOL_STATUS)[number];
 
 /** One line item in the fee structure, e.g. "Senior 1, Term 1, Tuition, 450000" */
@@ -68,6 +68,7 @@ export interface ISchool {
   submittedBy: mongoose.Types.ObjectId; // ref User (school_rep)
   rejectionReason?: string;
   verifiedAt?: Date;
+  subscriptionExpiresAt?: Date;
 
   createdAt: Date;
   updatedAt: Date;
@@ -121,15 +122,11 @@ const SchoolSchema = new Schema<ISchool>(
 
     feeStructure: [FeeItemSchema],
 
-    status: {
-      type: String,
-      enum: SCHOOL_STATUS,
-      default: "pending",
-      required: true,
-    },
+    status: { type: String, enum: SCHOOL_STATUS, default: "awaiting_payment", required: true },
     submittedBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
     rejectionReason: { type: String, trim: true },
     verifiedAt: { type: Date },
+    subscriptionExpiresAt: { type: Date },
   },
   { timestamps: true }
 );
