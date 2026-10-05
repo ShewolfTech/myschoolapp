@@ -1,10 +1,18 @@
 import Link from "next/link";
 import { auth } from "@/lib/auth";
-import { SignOutButton } from "./SignOutButton";
-import { Avatar } from "./Avatar";
+import { UserMenu } from "./UserMenu";
+
+function getPrimaryLink(role?: string): { href: string; label: string } {
+  if (role === "school_rep") return { href: "/register-school", label: "My school" };
+  if (role === "admin") return { href: "/admin", label: "Admin" };
+  // Parents, and the transitional "pending" role before they've chosen,
+  // both land on the public browse page.
+  return { href: "/schools", label: "Find a school" };
+}
 
 export async function SiteHeader() {
   const session = await auth();
+  const primary = session?.user ? getPrimaryLink(session.user.role) : null;
 
   return (
     <header className="bg-chalkboard text-paper-white sticky top-0 z-50">
@@ -20,40 +28,20 @@ export async function SiteHeader() {
             MySchoolApp
           </span>
         </Link>
-        <nav className="flex items-center gap-2 sm:gap-6 text-xs sm:text-sm font-ledger">
-          {session?.user && (
-            <Link href="/schools" className="hover:text-stamp-gold transition-colors whitespace-nowrap">
-              Find a school
+
+        <nav className="flex items-center gap-3 sm:gap-6 text-xs sm:text-sm font-ledger">
+          {primary && (
+            <Link href={primary.href} className="hover:text-stamp-gold transition-colors whitespace-nowrap">
+              {primary.label}
             </Link>
           )}
-          {session?.user?.role === "parent" && (
-            <Link href="/favorites" className="hover:text-stamp-gold transition-colors whitespace-nowrap">
-              Saved schools
-            </Link>
-          )}
-          {session?.user?.role === "school_rep" && (
-            <Link href="/register-school" className="hover:text-stamp-gold transition-colors whitespace-nowrap">
-              My school
-            </Link>
-          )}
-          {session?.user?.role === "admin" && (
-            <Link href="/admin" className="hover:text-stamp-gold transition-colors whitespace-nowrap">
-              Admin
-            </Link>
-          )}
+
           {session?.user ? (
-            <>
-              <Link href="/change-password" className="hover:text-stamp-gold transition-colors whitespace-nowrap">
-                Change password
-              </Link>
-              <Link href="/profile" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-                <Avatar name={session.user.name ?? "?"} image={session.user.image} size={24} />
-                <span className="text-paper-white/70 whitespace-nowrap hidden sm:inline">
-                  {session.user.name}
-                </span>
-              </Link>
-              <SignOutButton />
-            </>
+            <UserMenu
+              name={session.user.name ?? "?"}
+              image={session.user.image ?? null}
+              role={session.user.role}
+            />
           ) : (
             <>
               <Link href="/login" className="hover:text-stamp-gold transition-colors whitespace-nowrap">
