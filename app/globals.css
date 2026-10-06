@@ -5,6 +5,7 @@
   --navy: #10243A;
   --navy-dark: #0b1929;
   --maroon: #8B1E2D;
+  --red: #9f0606;
   --maroon-dark: #6b1620;
   --grey: #5F6063;
   --soft-white: #F8F7F4;
@@ -17,6 +18,7 @@
   --paper-white: var(--soft-white); /* card panel background */
   --ink: var(--navy);             /* text INSIDE white cards — most of the app's text */
   --ink-soft: var(--grey);        /* muted text INSIDE white cards */
+  --chalkboard-light: var(--red);
   --chalkboard: var(--maroon);    /* header, footer, primary buttons */
   --chalkboard-dark: var(--maroon-dark);
   --margin-red: var(--maroon);    /* accent/danger — same hue as chalkboard by design */
@@ -30,6 +32,7 @@
   --color-paper-white: var(--paper-white);
   --color-ink: var(--ink);
   --color-ink-soft: var(--ink-soft);
+  --color-chalkboard-light: var(--chalkboard-light);
   --color-chalkboard: var(--chalkboard);
   --color-chalkboard-dark: var(--chalkboard-dark);
   --color-margin-red: var(--margin-red);

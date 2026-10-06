@@ -26,7 +26,7 @@ const schoolInputSchema = z.object({
   boardingType: z.enum(BOARDING_TYPES),
   curriculum: z.enum(CURRICULUM_TYPES),
   foundedYear: z.number().int().optional(),
-  moeRegistrationNumber: z.string().trim().optional(),
+  moeRegistrationNumber: z.string().trim().min(1, "Ministry of Education Registration Number is required"),
   description: z.string().trim().optional(),
   facilities: z.array(z.string().trim()).default([]),
   images: z.array(z.string().url()).max(3).default([]),

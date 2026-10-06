@@ -354,8 +354,8 @@ export function RegisterSchoolForm({
               type="button"
               onClick={() => toggleLevel(level)}
               className={`text-sm font-ledger rounded-sm px-4 py-2 border transition-colors ${form.levels.includes(level)
-                  ? "bg-chalkboard text-paper-white border-chalkboard"
-                  : "bg-transparent text-ink-soft border-ink-soft/40"
+                ? "bg-chalkboard text-paper-white border-chalkboard"
+                : "bg-transparent text-ink-soft border-ink-soft/40"
                 }`}
             >
               {level}
@@ -405,9 +405,10 @@ export function RegisterSchoolForm({
 
       <div>
         <label className="block text-sm text-ink-soft mb-1">
-          Ministry of Education Registration Number (optional)
+          Ministry of Education Registration Number
         </label>
         <input
+          required
           value={form.moeRegistrationNumber}
           onChange={(e) => setForm({ ...form, moeRegistrationNumber: e.target.value })}
           placeholder="e.g. MOE/2024/UG/00123"

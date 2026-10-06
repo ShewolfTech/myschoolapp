@@ -21,7 +21,7 @@ export default function PrivacyPolicyPage() {
         </div>
 
         <header className="mb-10 border-b border-slate-200 pb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-chalkboard mb-3">
+          <h1 className="text-3xl md:text-4xl font-bold text-chalkboard-light mb-3">
             Privacy Policy
           </h1>
 
@@ -32,7 +32,7 @@ export default function PrivacyPolicyPage() {
 
         <div className="space-y-10 leading-7">
           <section>
-            <h2 className="text-xl font-semibold text-chalkboard mb-3">
+            <h2 className="text-xl font-semibold text-chalkboard-light  mb-3">
               1. Introduction
             </h2>
 
@@ -52,7 +52,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-chalkboard mb-3">
+            <h2 className="text-xl font-semibold text-chalkboard-light  mb-3">
               2. Information We Collect
             </h2>
 
@@ -83,7 +83,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-chalkboard mb-3">
+            <h2 className="text-xl font-semibold text-chalkboard-light  mb-3">
               3. How We Use Information
             </h2>
 
@@ -110,7 +110,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-chalkboard mb-3">
+            <h2 className="text-xl font-semibold text-chalkboard-light  mb-3">
               4. School Information
             </h2>
 
@@ -130,7 +130,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-chalkboard mb-3">
+            <h2 className="text-xl font-semibold text-chalkboard-light  mb-3">
               5. How We Share Information
             </h2>
 
@@ -149,7 +149,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-chalkboard mb-3">
+            <h2 className="text-xl font-semibold text-chalkboard-light  mb-3">
               6. Cookies and Similar Technologies
             </h2>
 
@@ -161,7 +161,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-chalkboard mb-3">
+            <h2 className="text-xl font-semibold text-chalkboard-light  mb-3">
               7. Data Security
             </h2>
 
@@ -174,7 +174,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-chalkboard mb-3">
+            <h2 className="text-xl font-semibold text-chalkboard-light  mb-3">
               8. Data Retention
             </h2>
 
@@ -187,7 +187,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-chalkboard mb-3">
+            <h2 className="text-xl font-semibold text-chalkboard-light  mb-3">
               9. Your Rights
             </h2>
 
@@ -205,7 +205,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-chalkboard mb-3">
+            <h2 className="text-xl font-semibold text-chalkboard-light  mb-3">
               10. Children&apos;s Privacy
             </h2>
 
@@ -224,7 +224,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-chalkboard mb-3">
+            <h2 className="text-xl font-semibold text-chalkboard-light  mb-3">
               11. Third-Party Services
             </h2>
 
@@ -236,7 +236,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-chalkboard mb-3">
+            <h2 className="text-xl font-semibold text-chalkboard-light  mb-3">
               12. Changes to This Privacy Policy
             </h2>
 
@@ -248,7 +248,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-chalkboard mb-3">
+            <h2 className="text-xl font-semibold text-chalkboard-light  mb-3">
               13. Contact Us
             </h2>
 

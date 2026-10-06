@@ -21,7 +21,7 @@ export default function TermsOfUsePage() {
         </div>
 
         <header className="mb-10 border-b border-slate-200 pb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-chalkboard mb-3">
+          <h1 className="text-3xl md:text-4xl font-bold text-chalkboard-light mb-3">
             Terms of Use
           </h1>
 
@@ -31,8 +31,9 @@ export default function TermsOfUsePage() {
         </header>
 
         <div className="space-y-10 leading-7">
+          {/* 1. Acceptance of These Terms */}
           <section>
-            <h2 className="text-xl font-semibold text-chalkboard mb-3">
+            <h2 className="text-xl font-semibold text-chalkboard-light mb-3">
               1. Acceptance of These Terms
             </h2>
 
@@ -48,8 +49,9 @@ export default function TermsOfUsePage() {
             </p>
           </section>
 
+          {/* 2. About MySchoolApp Uganda */}
           <section>
-            <h2 className="text-xl font-semibold text-chalkboard mb-3">
+            <h2 className="text-xl font-semibold text-chalkboard-light mb-3">
               2. About MySchoolApp Uganda
             </h2>
 
@@ -66,8 +68,9 @@ export default function TermsOfUsePage() {
             </p>
           </section>
 
+          {/* 3. User Accounts */}
           <section>
-            <h2 className="text-xl font-semibold text-chalkboard mb-3">
+            <h2 className="text-xl font-semibold text-chalkboard-light mb-3">
               3. User Accounts
             </h2>
 
@@ -83,8 +86,9 @@ export default function TermsOfUsePage() {
             </p>
           </section>
 
+          {/* 4. School Listings */}
           <section>
-            <h2 className="text-xl font-semibold text-chalkboard mb-3">
+            <h2 className="text-xl font-semibold text-chalkboard-light mb-3">
               4. School Listings
             </h2>
 
@@ -102,8 +106,9 @@ export default function TermsOfUsePage() {
             </p>
           </section>
 
+          {/* 5. School Representatives */}
           <section>
-            <h2 className="text-xl font-semibold text-chalkboard mb-3">
+            <h2 className="text-xl font-semibold text-chalkboard-light mb-3">
               5. School Representatives
             </h2>
 
@@ -119,28 +124,120 @@ export default function TermsOfUsePage() {
             </p>
           </section>
 
+          {/* 6. School Subscriptions and Payments */}
           <section>
-            <h2 className="text-xl font-semibold text-chalkboard mb-3">
-              6. Acceptable Use
+            <h2 className="text-xl font-semibold text-chalkboard-light mb-3">
+              6. School Subscriptions and Payments
+            </h2>
+
+            <p>
+              Schools that wish to be listed on MySchoolApp Uganda are required
+              to purchase an annual subscription. The applicable subscription
+              fee must be paid in full before a school can be reviewed,
+              approved, and published as an active school listing on the
+              platform.
+            </p>
+
+            <p className="mt-4">
+              Payment of the subscription fee does not automatically guarantee
+              approval or publication. MySchoolApp Uganda reserves the right
+              to verify the information submitted by a school and to approve
+              or reject a school listing at its discretion.
+            </p>
+
+            <p className="mt-4">
+              The person registering a school is responsible for ensuring that
+              the school is genuine, legitimately operating as represented, and
+              that they are authorised to submit the school for listing.
+              MySchoolApp Uganda may request additional information or
+              documentation to verify a school's identity, existence,
+              ownership, or authorisation.
+            </p>
+
+            <h3 className="text-lg font-semibold text-chalkboard-light mt-6 mb-3">
+              Non-Refundable Payments
+            </h3>
+
+            <p>
+              Subscription payments are generally non-refundable once payment
+              has been made. In particular, no refund will be issued where:
+            </p>
+
+            <ul className="list-disc pl-6 mt-3 space-y-2">
+              <li>
+                a person registers a school that does not exist;
+              </li>
+              <li>
+                a person knowingly provides false, misleading, or fraudulent
+                information;
+              </li>
+              <li>
+                a person impersonates a school or registers a school without
+                authorisation;
+              </li>
+              <li>
+                the submitted school information cannot be reasonably verified;
+              </li>
+              <li>
+                a school is rejected, suspended, or removed because of false,
+                misleading, fraudulent, or unauthorised information; or
+              </li>
+              <li>
+                an account or school listing is terminated because of a
+                violation of these Terms.
+              </li>
+            </ul>
+
+            <p className="mt-4">
+              By making a payment, the person submitting the school
+              acknowledges and agrees that the subscription fee is not a
+              payment for guaranteed approval or publication. Payment is
+              required for the school's application to and, once approved,
+              participation in the MySchoolApp Uganda platform.
+            </p>
+
+            <p className="mt-4">
+              Where a legitimate school is approved, the subscription remains
+              valid for the applicable subscription period stated at the time
+              of purchase. Renewal of the subscription is subject to payment
+              of the applicable renewal fee and continued compliance with
+              these Terms.
+            </p>
+          </section>
+
+          {/* 7. Acceptable Use */}
+          <section>
+            <h2 className="text-xl font-semibold text-chalkboard-light mb-3">
+              7. Acceptable Use
             </h2>
 
             <p>You agree not to use MySchoolApp Uganda to:</p>
 
             <ul className="list-disc pl-6 mt-3 space-y-2">
               <li>Provide knowingly false or misleading information.</li>
-              <li>Impersonate another individual, school, or organisation.</li>
-              <li>Attempt to gain unauthorised access to another account.</li>
+
+              <li>
+                Impersonate another individual, school, or organisation.
+              </li>
+
+              <li>
+                Attempt to gain unauthorised access to another account.
+              </li>
+
               <li>
                 Interfere with the operation, security, or availability of the
                 platform.
               </li>
+
               <li>
                 Upload malicious code, malware, or harmful technical material.
               </li>
+
               <li>
                 Scrape, copy, or systematically extract platform content in a
                 way that places an unreasonable burden on the service.
               </li>
+
               <li>
                 Use the service for unlawful, fraudulent, abusive, or harmful
                 purposes.
@@ -148,9 +245,10 @@ export default function TermsOfUsePage() {
             </ul>
           </section>
 
+          {/* 8. Content Submitted by Users */}
           <section>
-            <h2 className="text-xl font-semibold text-chalkboard mb-3">
-              7. Content Submitted by Users
+            <h2 className="text-xl font-semibold text-chalkboard-light mb-3">
+              8. Content Submitted by Users
             </h2>
 
             <p>
@@ -172,9 +270,10 @@ export default function TermsOfUsePage() {
             </p>
           </section>
 
+          {/* 9. Intellectual Property */}
           <section>
-            <h2 className="text-xl font-semibold text-chalkboard mb-3">
-              8. Intellectual Property
+            <h2 className="text-xl font-semibold text-chalkboard-light mb-3">
+              9. Intellectual Property
             </h2>
 
             <p>
@@ -189,9 +288,10 @@ export default function TermsOfUsePage() {
             </p>
           </section>
 
+          {/* 10. No Guarantee of Admission */}
           <section>
-            <h2 className="text-xl font-semibold text-chalkboard mb-3">
-              9. No Guarantee of Admission
+            <h2 className="text-xl font-semibold text-chalkboard-light mb-3">
+              10. No Guarantee of Admission
             </h2>
 
             <p>
@@ -206,9 +306,10 @@ export default function TermsOfUsePage() {
             </p>
           </section>
 
+          {/* 11. Third-Party Websites */}
           <section>
-            <h2 className="text-xl font-semibold text-chalkboard mb-3">
-              10. Third-Party Websites
+            <h2 className="text-xl font-semibold text-chalkboard-light mb-3">
+              11. Third-Party Websites
             </h2>
 
             <p>
@@ -223,9 +324,10 @@ export default function TermsOfUsePage() {
             </p>
           </section>
 
+          {/* 12. Availability of the Service */}
           <section>
-            <h2 className="text-xl font-semibold text-chalkboard mb-3">
-              11. Availability of the Service
+            <h2 className="text-xl font-semibold text-chalkboard-light mb-3">
+              12. Availability of the Service
             </h2>
 
             <p>
@@ -239,9 +341,10 @@ export default function TermsOfUsePage() {
             </p>
           </section>
 
+          {/* 13. Limitation of Liability */}
           <section>
-            <h2 className="text-xl font-semibold text-chalkboard mb-3">
-              12. Limitation of Liability
+            <h2 className="text-xl font-semibold text-chalkboard-light mb-3">
+              13. Limitation of Liability
             </h2>
 
             <p>
@@ -258,9 +361,10 @@ export default function TermsOfUsePage() {
             </p>
           </section>
 
+          {/* 14. Suspension or Termination */}
           <section>
-            <h2 className="text-xl font-semibold text-chalkboard mb-3">
-              13. Suspension or Termination
+            <h2 className="text-xl font-semibold text-chalkboard-light mb-3">
+              14. Suspension or Termination
             </h2>
 
             <p>
@@ -270,9 +374,10 @@ export default function TermsOfUsePage() {
             </p>
           </section>
 
+          {/* 15. Privacy */}
           <section>
-            <h2 className="text-xl font-semibold text-chalkboard mb-3">
-              14. Privacy
+            <h2 className="text-xl font-semibold text-chalkboard-light mb-3">
+              15. Privacy
             </h2>
 
             <p>
@@ -288,9 +393,10 @@ export default function TermsOfUsePage() {
             </p>
           </section>
 
+          {/* 16. Changes to These Terms */}
           <section>
-            <h2 className="text-xl font-semibold text-chalkboard mb-3">
-              15. Changes to These Terms
+            <h2 className="text-xl font-semibold text-chalkboard-light mb-3">
+              16. Changes to These Terms
             </h2>
 
             <p>
@@ -304,9 +410,10 @@ export default function TermsOfUsePage() {
             </p>
           </section>
 
+          {/* 17. Contact */}
           <section>
-            <h2 className="text-xl font-semibold text-chalkboard mb-3">
-              16. Contact
+            <h2 className="text-xl font-semibold text-chalkboard-light mb-3">
+              17. Contact
             </h2>
 
             <p>

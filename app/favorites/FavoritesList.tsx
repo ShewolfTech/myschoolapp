@@ -17,7 +17,7 @@ export function FavoritesList() {
   if (!loading && favorites.length === 0) {
     return (
       <div className="py-16 text-center">
-        <p className="font-display text-xl text-chalkboard mb-2">
+        <p className="font-display text-xl text-chalkboard-light mb-2">
           No saved schools yet.
         </p>
         <p className="text-ink-soft text-sm">

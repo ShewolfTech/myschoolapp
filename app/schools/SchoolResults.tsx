@@ -32,7 +32,7 @@ export function SchoolResults({
   if (schools.length === 0) {
     return (
       <div className="py-16 text-center">
-        <p className="font-display text-xl text-chalkboard mb-2">No schools match yet.</p>
+        <p className="font-display text-xl text-chalkboard-light mb-2">No schools match yet.</p>
         <p className="text-ink-soft text-sm">
           Try widening your search &mdash; clear a filter or pick &ldquo;All
           regions&rdquo;.
@@ -50,7 +50,7 @@ export function SchoolResults({
             className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 py-4 group"
           >
             <div>
-              <p className="font-display text-lg font-semibold text-chalkboard group-hover:text-margin-red transition-colors">
+              <p className="font-display text-lg font-semibold text-chalkboard-light group-hover:text-margin-red transition-colors">
                 {school.name}
               </p>
               <p className="text-sm text-ink-soft">
